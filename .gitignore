@@ -1,0 +1,12 @@
+# Folders to ignore
+**/__pycache__/*
+**/lenses/*
+**/dataset/*
+
+# Files to ignore
+*.zip
+*.tgz
+*.DS_Store
+*.pt
+*.npz
+
