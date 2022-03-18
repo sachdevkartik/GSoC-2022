@@ -12,7 +12,7 @@ An Equivariant neural network is built using PyTorch for classifying the images 
 **Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test1.ipynb)
 
 
-**Model Weights**: 
+**Model Weights**: [cnn_state_dict_model.pt](model/cnn_state_dict_model.pt)
 
 
 <br>
@@ -26,12 +26,12 @@ An efficient Convolutional Vision Transformer (CvT) is built for binary classifi
 **Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test2.ipynb)
  or run locally after executing ```setup.bash ```
 
-**Model Weights**: 
+**Model Weights**: [ConvTransformer_2022-03-15-13-40-54.pt](model/ConvTransformer_2022-03-15-13-40-54.pt)
 
 <br>
 
  ## __Misc: Further exploring Transformers__ 
- To make more efficient and robust transformers, I have tried a couple of alternatives than vanilla and convolutional transformers.
+ To make more efficient and robust transformers, I have tried a couple of alternatives to vanilla and convolutional transformers. Resulting are smaller, but the results are not better than CvT as of now. I am working on it, would add them later.
 
 <br>
 
