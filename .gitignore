@@ -7,6 +7,5 @@
 *.zip
 *.tgz
 *.DS_Store
-*.pt
 *.npz
 
