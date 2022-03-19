@@ -14,7 +14,7 @@ An Equivariant neural network is built using PyTorch for classifying the images 
 
 **Model Weights**: [cnn_state_dict_model.pt](model/cnn_state_dict_model.pt)
 
-**Inference**: Please use [test1_inference.ipynb](model/test1_inference.ipynb) file for inference.
+**Inference**: Please use [test1_inference.ipynb](./test1_inference.ipynb) file for inference.
 
 
 <br>
@@ -31,7 +31,7 @@ An efficient Convolutional Vision Transformer (CvT) is built for binary classifi
 
 **Model Weights**: [ConvTransformer_2022-03-15-13-40-54.pt](model/ConvTransformer_2022-03-15-13-40-54.pt)
 
-**Inference**: Please use [test2_inference.ipynb](model/test2_inference.ipynb) file for inference.
+**Inference**: Please use [test2_inference.ipynb](./test2_inference.ipynb) file for inference.
 
 <br>
 
@@ -45,7 +45,7 @@ A lightweight Distillable Vision Transformer is built for binary classification 
 
 **Model Weights**: [DistillableViT_2022-03-19-00-18-42.pt](model/DistillableViT_2022-03-19-00-18-42.pt)
 
-**Inference**: Please use [test2_DistillableViT_inference.ipynb](model/test2_DistillableViT_inference.ipynb) file for inference.
+**Inference**: Please use [test2_DistillableViT_inference.ipynb](./test2_DistillableViT_inference.ipynb) file for inference.
 
 <br>
 
