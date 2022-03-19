@@ -1,4 +1,4 @@
-# GSoC-2022
+# __GSoC-2022__
 Solution for evaluation tests for GSoC 2022 
 This repo solves the following tasks:
 
@@ -14,24 +14,38 @@ An Equivariant neural network is built using PyTorch for classifying the images 
 
 **Model Weights**: [cnn_state_dict_model.pt](model/cnn_state_dict_model.pt)
 
+**Inference**: Please use [test1_inference.ipynb](model/test1_inference.ipynb) file for inference.
+
 
 <br>
 
 ## __Specific Test V. Exploring Transformers__ ##
+
+### __Approach 1__ ##
 
 An efficient Convolutional Vision Transformer (CvT) is built for binary classification using PyTorch. Approach and strategy are discussed in [test2.ipynb](./test2.ipynb)
 
 **Dataset**: The Dataset consists of simulated strong gravitational lensing images with and without substructure. 
 
 **Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test2.ipynb)
- or run locally after executing ```setup.bash ```
 
 **Model Weights**: [ConvTransformer_2022-03-15-13-40-54.pt](model/ConvTransformer_2022-03-15-13-40-54.pt)
 
+**Inference**: Please use [test2_inference.ipynb](model/test2_inference.ipynb) file for inference.
+
 <br>
 
- ## __Misc: Further exploring Transformers__ 
- To make more efficient and robust transformers, I have tried a couple of alternatives to vanilla and convolutional transformers. Resulting are smaller, but the results are not better than CvT as of now. I am working on it, would add them later.
+### __Approach 2__ ##
+
+A lightweight Distillable Vision Transformer is built for binary classification using PyTorch. Approach and strategy are discussed in [test2_DistillableViT.ipynb](./test2_DistillableViT.ipynb)
+
+**Dataset**: The Dataset consists of simulated strong gravitational lensing images with and without substructure. 
+
+**Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test2_DistillableViT.ipynb)
+
+**Model Weights**: [DistillableViT_2022-03-19-00-18-42.pt](model/DistillableViT_2022-03-19-00-18-42.pt)
+
+**Inference**: Please use [test2_DistillableViT_inference.ipynb](model/test2_DistillableViT_inference.ipynb) file for inference.
 
 <br>
 
