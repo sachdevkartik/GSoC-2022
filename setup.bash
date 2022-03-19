@@ -13,9 +13,10 @@ conda install pandas
 pip install vit_pytorch \
             split-folders \
             e2cnn \
-            gdown \
             torchinfo \
             einops
+
+!pip install --upgrade --no-cache-dir gdown
 
 # installing apt-get packages
 apt-get update
