@@ -67,6 +67,17 @@ To run the notebooks locally and install required dependencies, please execute t
     year={2021}
   }
   ```
+* [Training data-efficient image transformers & distillation through attention](https://arxiv.org/pdf/2012.12877.pdf)
+
+
+    ```
+    @article{touvron2020deit,
+      title={Training data-efficient image transformers & distillation through attention},
+      author={Hugo Touvron and Matthieu Cord and Matthijs Douze and Francisco Massa and Alexandre Sablayrolles and Herv\'e J\'egou},
+      journal={arXiv preprint arXiv:2012.12877},
+      year={2020}
+    }
+    ```
 
 * Apoorva Singh, Yurii Halychanskyi, Marcos Tidball, DeepLense, (2021), GitHub repository, https://github.com/ML4SCI/DeepLense
 
