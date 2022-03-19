@@ -1,6 +1,6 @@
 # __GSoC-2022__
-Solution for evaluation tests for GSoC 2022 
-This repo solves the following tasks:
+Solution for evaluation tests for GSoC DeepLense 2022. <br> 
+This repo solves the following tests:
 
 <br>
 
