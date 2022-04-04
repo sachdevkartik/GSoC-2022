@@ -202,6 +202,8 @@ class EqCvT(nn.Module):
         sym_group = 'Circular', 
         N = 4,
         image_size=224,
+        e2cc_mult_1 = 3,
+
     ):
         super().__init__()
         kwargs = dict(locals())
@@ -218,13 +220,13 @@ class EqCvT(nn.Module):
             self.r2_act = gspaces.Rot2dOnR2(N=N)
 
         # the input image is a scalar field, corresponding to the trivial representation
-        in_type = nn_eq.FieldType(self.r2_act, [self.r2_act.trivial_repr])
+        in_type = nn_eq.FieldType(self.r2_act, channels*[self.r2_act.trivial_repr])
         
         # we store the input type for wrapping the images into a geometric tensor during the forward pass
         self.input_type = in_type
         
         # convolution 1
-        out_type = nn_eq.FieldType(self.r2_act, 3*[self.r2_act.regular_repr])
+        out_type = nn_eq.FieldType(self.r2_act, e2cc_mult_1*[self.r2_act.regular_repr])
         self.block1 = nn_eq.SequentialModule(
             nn_eq.MaskModule(in_type, image_size, margin=1),
             nn_eq.R2Conv(in_type, out_type, kernel_size=7, padding=1, bias=False),
@@ -232,7 +234,7 @@ class EqCvT(nn.Module):
             nn_eq.ReLU(out_type, inplace=True),
         )
 
-        self.pool3 = nn_eq.PointwiseAvgPoolAntialiased(out_type, sigma=0.66, stride=1, padding=0)
+        self.pool1 = nn_eq.PointwiseAvgPoolAntialiased(out_type, sigma=0.66, stride=1, padding=0)
         
         self.gpool = nn_eq.GroupPooling(out_type)
 
@@ -266,7 +268,7 @@ class EqCvT(nn.Module):
         
         # Equviarant layers
         x = self.block1(x)
-        x = self.pool3(x)
+        x = self.pool1(x)
         x = self.gpool(x)
 
         # unwrap the output GeometricTensor
