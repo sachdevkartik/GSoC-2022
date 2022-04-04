@@ -6,6 +6,7 @@ from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
 from e2cnn import gspaces
 import e2cnn.nn as nn_eq
+from PIL import Image
 
 
 
@@ -271,3 +272,29 @@ class EqCvT(nn.Module):
 
         
         return x
+
+    
+def test_equivariance(model: torch.nn.Module, x, device, labels_map,
+                    resize1, resize2, pad, to_tensor, to_gray, image_size, channels):
+    # evaluate the `model` on 8 rotated versions of the input image `x`
+    model.eval()
+    
+    wrmup = model(torch.randn(1, channels, image_size, image_size).to(device))
+    del wrmup
+
+    x = resize1(pad(x))
+
+    print('##########################################################################################')
+    header = 'angle |  ' + '  '.join(["{:6d}".format(d) for d in range(10)])
+    print(header)
+    with torch.no_grad():
+        for r in range(8):
+            x_transformed = to_tensor(to_gray(resize2(x.rotate(r*45., Image.BILINEAR)))) #.reshape(1, 1, 29, 29)
+            x_transformed = x_transformed.unsqueeze(0).to(device)
+
+            y = model(x_transformed)
+            y = y.to('cpu').numpy().squeeze()
+            
+            angle = r * 45
+            print("{:5d} : {}".format(angle, labels_map[y]))
+    print('##########################################################################################')
