@@ -181,22 +181,14 @@ class EqCvT(nn.Module):
         *,
         channels,
         num_classes,
-        s1_emb_dim = 64,
-        s1_emb_kernel = 7,
-        s1_emb_stride = 4,
+        s1_emb_dim = 192,
+        s1_emb_kernel = 3,
+        s1_emb_stride = 2,
         s1_proj_kernel = 3,
         s1_kv_proj_stride = 2,
-        s1_heads = 1,
-        s1_depth = 1,
+        s1_heads = 3,
+        s1_depth = 2,
         s1_mlp_mult = 4,
-        s2_emb_dim = 192,
-        s2_emb_kernel = 3,
-        s2_emb_stride = 2,
-        s2_proj_kernel = 3,
-        s2_kv_proj_stride = 2,
-        s2_heads = 3,
-        s2_depth = 2,
-        s2_mlp_mult = 4,
         mlp_last = 192,
         dropout = 0.,
         sym_group = 'Circular', 
@@ -241,7 +233,7 @@ class EqCvT(nn.Module):
         # number of output channels
         c = self.gpool.out_type.size
 
-        prefix = 's2'
+        prefix = 's1'
         config, kwargs = group_by_key_prefix_and_remove_prefix(f'{prefix}_', kwargs)
 
         layers.append(nn.Sequential(
