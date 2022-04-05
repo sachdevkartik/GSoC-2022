@@ -33,7 +33,7 @@ Multiple approaches were followed to achieve high accuracy with Vision Transform
 
 ### __Approach 1__ ##
 
-An efficient Convolutional Vision Transformer (CvT) is built for binary classification using PyTorch. Approach and strategy are discussed in [test2_e2c_vit.ipynb](./test2_e2c_vit.ipynb)
+An Equivariant Convolutional Vision Transformer is built for binary classification using PyTorch. Approach and strategy are discussed in [test2_e2c_vit.ipynb](./test2_e2c_vit.ipynb)
 
 * **Dataset**: The Dataset consists of simulated strong gravitational lensing images with and without substructure. 
 
