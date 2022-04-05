@@ -7,46 +7,94 @@ This repo solves the following tests:
 ## __Common Test I. Multi-Class Classification__ ##
 An Equivariant neural network is built using PyTorch for classifying the images into lenses using PyTorch. Approach and strategy are discussed in [test1.ipynb](./test1.ipynb)
 
-**Dataset**: The Dataset consists of three classes, strong lensing images with no substructure, subhalo substructure, and vortex substructure. 
+* **Dataset**: The Dataset consists of three classes, strong lensing images with no substructure, subhalo substructure, and vortex substructure. 
 
-**Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test1.ipynb)
+* **Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test1.ipynb)
 
 
-**Model Weights**: [cnn_state_dict_model.pt](model/cnn_state_dict_model.pt)
+* **Model Weights**: [cnn_state_dict_model.pt](model/cnn_state_dict_model.pt)
 
-**Inference**: Please use [test1_inference.ipynb](./test1_inference.ipynb) file for inference.
+* **Inference**: Please use [test1_inference.ipynb](./test1_inference.ipynb) file for inference.
 
+* **Results**:
+
+  | S.No | Metric | Value |
+  | --- | --- | --- |
+  | 1. | Best validation accuracy | 94.81% |
+  | 2. | AUC (without sub structure)  | 0.9936 |
+  | 3. | AUC (sphere)  | 0.9845 |
+  | 4. | AUC (Vortex)  | 0.9936 |
 
 <br>
 
 ## __Specific Test V. Exploring Transformers__ ##
 
+Multiple approaches were followed to achieve high accuracy with Vision Transformers. The following lists the approaches followed for solving the task. They are ordered by decreasing validation accuracy.
+
 ### __Approach 1__ ##
 
-An efficient Convolutional Vision Transformer (CvT) is built for binary classification using PyTorch. Approach and strategy are discussed in [test2.ipynb](./test2.ipynb)
+An efficient Convolutional Vision Transformer (CvT) is built for binary classification using PyTorch. Approach and strategy are discussed in [test2_e2c_vit.ipynb](./test2_e2c_vit.ipynb)
 
-**Dataset**: The Dataset consists of simulated strong gravitational lensing images with and without substructure. 
+* **Dataset**: The Dataset consists of simulated strong gravitational lensing images with and without substructure. 
 
-**Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test2.ipynb)
+* **Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test2_e2c_vit.ipynb)
 
-**Model Weights**: [ConvTransformer_2022-03-15-13-40-54.pt](model/ConvTransformer_2022-03-15-13-40-54.pt)
+* **Model Weights**: [e2cnn_vit_2022-04-04-23-41-30.pt](model/e2cnn_vit_2022-04-04-23-41-30.pt)
 
-**Inference**: Please use [test2_inference.ipynb](./test2_inference.ipynb) file for inference.
+* **Inference**: Please use [test2_e2cnn_vit_inference.ipynb](./test2_e2cnn_vit_inference.ipynb) file for inference.
+
+* **Results**:
+
+    | S.No | Metric | Value |
+    | --- | --- | --- |
+    | 1. | Best validation accuracy | 97.10% |
+    | 2. | AUC (with sub structure)  | 0.9961 |
+    | 3. | AUC (without sub structure)  | 0.9975 |
 
 <br>
 
+
 ### __Approach 2__ ##
+
+An efficient Convolutional Vision Transformer (CvT) is built for binary classification using PyTorch. Approach and strategy are discussed in [test2.ipynb](./test2.ipynb)
+
+* **Dataset**: The Dataset consists of simulated strong gravitational lensing images with and without substructure. 
+
+* **Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test2.ipynb)
+
+* **Model Weights**: [ConvTransformer_2022-03-15-13-40-54.pt](model/ConvTransformer_2022-03-15-13-40-54.pt)
+
+* **Inference**: Please use [test2_inference.ipynb](./test2_inference.ipynb) file for inference.
+
+* **Results**:
+
+  | S.No | Metric | Value |
+  | --- | --- | --- |
+  | 1. | Best validation accuracy | 86.95% |
+  | 2. | AUC (with sub structure)  | 0.9532 |
+  | 3. | AUC (without sub structure)  | 0.9464 |
+
+<br>
+
+### __Approach 3__ ##
 
 A lightweight Distillable Vision Transformer is built for binary classification using PyTorch. Approach and strategy are discussed in [test2_DistillableViT.ipynb](./test2_DistillableViT.ipynb)
 
-**Dataset**: The Dataset consists of simulated strong gravitational lensing images with and without substructure. 
+* **Dataset**: The Dataset consists of simulated strong gravitational lensing images with and without substructure. 
 
-**Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test2_DistillableViT.ipynb)
+* **Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test2_DistillableViT.ipynb)
 
-**Model Weights**: [DistillableViT_2022-03-19-00-18-42.pt](model/DistillableViT_2022-03-19-00-18-42.pt)
+* **Model Weights**: [DistillableViT_2022-03-19-00-18-42.pt](model/DistillableViT_2022-03-19-00-18-42.pt)
 
-**Inference**: Please use [test2_DistillableViT_inference.ipynb](./test2_DistillableViT_inference.ipynb) file for inference.
+* **Inference**: Please use [test2_DistillableViT_inference.ipynb](./test2_DistillableViT_inference.ipynb) file for inference.
 
+* **Results**:
+
+  | S.No | Metric | Value |
+  | --- | --- | --- |
+  | 1. | Best validation accuracy | 77.15% |
+  | 2. | AUC (with sub structure)  | 0.8807 |
+  | 3. | AUC (without sub structure)  | 0.8734 |
 <br>
 
 
