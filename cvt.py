@@ -273,7 +273,6 @@ class EqCvT(nn.Module):
         
         return x
 
-    
 def test_equivariance(model: torch.nn.Module, x, device, labels_map,
                     resize1, resize2, pad, to_tensor, to_gray, image_size, channels):
     # evaluate the `model` on 8 rotated versions of the input image `x`
@@ -284,8 +283,8 @@ def test_equivariance(model: torch.nn.Module, x, device, labels_map,
 
     x = resize1(pad(x))
 
-    print('##########################################################################################')
-    header = 'angle |  ' + '  '.join(["{:6d}".format(d) for d in range(10)])
+    print('###########################')
+    header = 'angle |  ' + '  '.join(["{}".format(value) for key, value in labels_map.items()])
     print(header)
     with torch.no_grad():
         for r in range(8):
@@ -296,5 +295,5 @@ def test_equivariance(model: torch.nn.Module, x, device, labels_map,
             y = y.to('cpu').numpy().squeeze()
             
             angle = r * 45
-            print("{:5d} : {}".format(angle, labels_map[y]))
-    print('##########################################################################################')
+            print("{:5d} : {}".format(angle, y))
+    print('###########################')
