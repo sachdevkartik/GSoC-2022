@@ -29,7 +29,7 @@ An Equivariant neural network is built using PyTorch for classifying the images 
 
 ## __Specific Test V. Exploring Transformers__ ##
 
-Multiple approaches were followed to achieve high accuracy with Vision Transformers. The following lists the approaches followed for solving the task. They are ordered by decreasing validation accuracy.
+Multiple approaches were followed to achieve high accuracy with Vision Transformers. The following lists the approaches followed for solving the task.
 
 ### __Approach 1__ ##
 
@@ -62,7 +62,7 @@ An efficient Convolutional Vision Transformer (CvT) is built for binary classifi
 
 * **Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test2.ipynb)
 
-* **Model Weights**: [ConvTransformer_2022-03-15-13-40-54.pt](model/ConvTransformer_2022-03-15-13-40-54.pt)
+* **Model Weights**: [ConvTransformer_2022-04-05-21-20-09.pt](model/ConvTransformer_2022-03-15-13-40-54.pt)
 
 * **Inference**: Please use [test2_inference.ipynb](./test2_inference.ipynb) file for inference.
 
@@ -70,9 +70,9 @@ An efficient Convolutional Vision Transformer (CvT) is built for binary classifi
 
   | S.No | Metric | Value |
   | --- | --- | --- |
-  | 1. | Best validation accuracy | 86.95% |
-  | 2. | AUC (with sub structure)  | 0.9532 |
-  | 3. | AUC (without sub structure)  | 0.9464 |
+  | 1. | Best validation accuracy | 98.12% |
+  | 2. | AUC (with sub structure)  | 0.9988 |
+  | 3. | AUC (without sub structure)  | 0.9989 |
 
 <br>
 
