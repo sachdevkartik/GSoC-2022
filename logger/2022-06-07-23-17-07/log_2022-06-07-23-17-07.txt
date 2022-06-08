@@ -1,0 +1,30 @@
+DEBUG:root:Epoch : 1 - LR 0.00010000 - loss : 0.8346 - val_loss : 0.4641 - val_acc: 0.8020 
+
+DEBUG:root:Epoch : 2 - LR 0.00010000 - loss : 0.3957 - val_loss : 0.3600 - val_acc: 0.8481 
+
+DEBUG:root:Epoch : 3 - LR 0.00010000 - loss : 0.3388 - val_loss : 0.3380 - val_acc: 0.8599 
+
+DEBUG:root:Epoch : 4 - LR 0.00010000 - loss : 0.3166 - val_loss : 0.3179 - val_acc: 0.8654 
+
+DEBUG:root:Epoch : 5 - LR 0.00010000 - loss : 0.3005 - val_loss : 0.2973 - val_acc: 0.8746 
+
+DEBUG:root:Epoch : 6 - LR 0.00010000 - loss : 0.2902 - val_loss : 0.2891 - val_acc: 0.8775 
+
+DEBUG:root:Epoch : 7 - LR 0.00010000 - loss : 0.2796 - val_loss : 0.2899 - val_acc: 0.8784 
+
+DEBUG:root:Epoch : 8 - LR 0.00010000 - loss : 0.2692 - val_loss : 0.2905 - val_acc: 0.8770 
+
+DEBUG:root:Epoch : 9 - LR 0.00010000 - loss : 0.2609 - val_loss : 0.2952 - val_acc: 0.8747 
+
+DEBUG:root:Epoch : 10 - LR 0.00010000 - loss : 0.2574 - val_loss : 0.2884 - val_acc: 0.8799 
+
+DEBUG:root:Epoch : 11 - LR 0.00010000 - loss : 0.2510 - val_loss : 0.2689 - val_acc: 0.8863 
+
+DEBUG:root:Epoch : 12 - LR 0.00010000 - loss : 0.2455 - val_loss : 0.2697 - val_acc: 0.8859 
+
+DEBUG:root:Epoch : 13 - LR 0.00010000 - loss : 0.2399 - val_loss : 0.2727 - val_acc: 0.8876 
+
+DEBUG:root:Epoch : 14 - LR 0.00010000 - loss : 0.2375 - val_loss : 0.2731 - val_acc: 0.8861 
+
+DEBUG:root:Epoch : 15 - LR 0.00010000 - loss : 0.2305 - val_loss : 0.2677 - val_acc: 0.8878 
+

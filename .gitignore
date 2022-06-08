@@ -2,6 +2,7 @@
 **/__pycache__/*
 **/lenses/*
 **/dataset/*
+/data/*
 
 # Files to ignore
 *.zip
