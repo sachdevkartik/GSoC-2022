@@ -3,6 +3,7 @@
 **/lenses/*
 **/dataset/*
 /data/*
+*.ipynb_checkpoints/*
 
 # Files to ignore
 *.zip
