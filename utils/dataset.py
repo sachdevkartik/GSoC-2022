@@ -54,7 +54,13 @@ def extract_split_dataset(  # change to filename
 class DeepLenseDataset(Dataset):
     # TODO: add val-loader + splitting
     def __init__(
-        self, destination_dir, mode, dataset_name, transform=None, download="False"
+        self,
+        destination_dir,
+        mode,
+        dataset_name,
+        transform=None,
+        download="False",
+        channels=1,
     ):
         assert mode in ["train", "test", "val"]
 
@@ -98,6 +104,7 @@ class DeepLenseDataset(Dataset):
         self.class_to_idx = {cls_name: i for i, cls_name in enumerate(classes)}
         self.imagefilename = []
         self.labels = []
+        self.channels = channels
 
         for i in classes:
             for x in os.listdir(os.path.join(self.root_dir, i)):
@@ -112,7 +119,11 @@ class DeepLenseDataset(Dataset):
             image = image[0]
         # image = image / image.max() #normalizes data in range 0 - 255
         # image = 255 * image
-        image = Image.fromarray(image.astype("uint8"))  # .convert("RGB")
+        if self.channels == 3:
+            image = Image.fromarray(image.astype("uint8")).convert("RGB")
+        else:
+            image = Image.fromarray(image.astype("uint8"))  # .convert("RGB")
+
         if self.transform is not None:
             image = self.transform(image)
         return image, label
