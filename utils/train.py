@@ -60,7 +60,7 @@ def train(
                 data = data.to(device)
                 label = label.to(device)
 
-                val_output = v(data)
+                val_output = model(data)
                 val_loss = criterion(val_output, label)
 
                 acc = (val_output.argmax(dim=1) == label).float().mean()

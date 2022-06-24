@@ -56,6 +56,14 @@ parser.add_argument("--cuda", action="store_true")
 parser.add_argument("--no-cuda", dest="cuda", action="store_false")
 parser.set_defaults(cuda=True)
 
+parser.add_argument(
+    "--checkpoint",
+    metavar="XX.pth",
+    type=str,
+    default="model/ConvTransformer_2022-06-07-23-17-07.pt",
+    help="checkpoint of pretrained model",
+)
+
 args = parser.parse_args()
 
 
@@ -116,7 +124,7 @@ def main():
     print(f"Train Data: {len(trainset)}")
     print(f"Val Data: {len(testset)}")
 
-    model = EqCvT(
+    best_model = EqCvT(
         channels=train_config["channels"],
         num_classes=num_classes,
         s1_emb_dim=network_config["s1_emb_dim"],  # stage 1 - (same as above)
@@ -135,52 +143,35 @@ def main():
         e2cc_mult_1=network_config["e2cc_mult_1"],
     ).to(device)
 
+    # summary(best_model, input_size=(train_config["batch_size"], 1, 129, 129))
+
+    MODEL_PATH = "model/ConvTransformer_2022-06-07-23-17-07.pt"
+    best_model.load_state_dict(torch.load(MODEL_PATH))
+
     # print(v)
-    def count_parameters(model):
-        return sum(p.numel() for p in model.parameters() if p.requires_grad)
+    def count_parameters(best_model):
+        return sum(p.numel() for p in best_model.parameters() if p.requires_grad)
 
-    print("Parameter count:", count_parameters(model))
-    print("\n", model)
+    print("Parameter count:", count_parameters(best_model))
+    print("\n", best_model)
 
-    # loss function
-    criterion = nn.CrossEntropyLoss()
-
-    # optimizer
-    optimizer = optim.Adam(
-        model.parameters(),
-        lr=optimizer_config["lr"],
-        betas=optimizer_config["betas"],
-        weight_decay=optimizer_config["weight_decay"],
+    # inference
+    infer_obj = Inference(
+        best_model,
+        test_loader,
+        device,
+        num_classes,
+        testset,
+        dataset_name,
+        labels_map=classes,
+        image_size=image_size,
+        channels=train_config["channels"],
+        destination_dir="data",
     )
 
-    # scheduler
-    step_lr = train_config["lr_schedule_config"]["step_lr"]
-    reduce_on_plateau = train_config["lr_schedule_config"]["reduce_on_plateau"]
-
-    scheduler_plateau = ReduceLROnPlateau(
-        optimizer,
-        "min",
-        factor=reduce_on_plateau["factor"],
-        patience=reduce_on_plateau["patience"],
-        threshold=reduce_on_plateau["threshold"],
-        verbose=reduce_on_plateau["verbose"],
-    )
-    scheduler_step = StepLR(
-        optimizer, step_size=step_lr["step_size"], gamma=step_lr["gamma"]
-    )
-
-    train(
-        epochs=train_config["num_epochs"],
-        model=model,
-        device=device,
-        train_loader=train_loader,
-        valid_loader=test_loader,  # change to val-loader
-        criterion=criterion,
-        optimizer=optimizer,
-        use_lr_schedule=train_config["lr_schedule_config"]["use_lr_schedule"],
-        scheduler_step=scheduler_step,
-        path=PATH,
-    )
+    infer_obj.infer_plot_roc()
+    infer_obj.generate_plot_confusion_matrix()
+    infer_obj.test_equivariance()
 
 
 if __name__ == "__main__":
