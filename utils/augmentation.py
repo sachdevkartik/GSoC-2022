@@ -10,8 +10,13 @@ from torchvision.transforms import (
     RandomPerspective,
     Grayscale,
     RandomApply,
+    RandomVerticalFlip,
+    RandomHorizontalFlip,
 )
 from PIL import Image
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+from torch.utils.data import DataLoader, Dataset
 
 
 def get_transform_train(upsample_size, final_size, channels=1):
@@ -49,6 +54,8 @@ def get_transform_train(upsample_size, final_size, channels=1):
                 # Pad((0, 0, 1, 1), fill=0),
                 Resize(upsample_size),
                 RandomRotation(degrees=(0, 180), resample=Image.BILINEAR, expand=False),
+                RandomVerticalFlip(p=0.3),
+                RandomHorizontalFlip(p=0.3),
                 Resize(final_size),
                 ToTensor(),
             ]
@@ -59,15 +66,26 @@ def get_transform_train(upsample_size, final_size, channels=1):
         [
             RandomCrop(128),
             # Pad((0, 0, 1, 1), fill=0),
-            Resize(upsample_size),
-            RandomRotation(degrees=(0, 180), resample=Image.BILINEAR, expand=False),
+            # Resize(upsample_size),
+            # RandomRotation(degrees=(0, 180), resample=Image.BILINEAR, expand=False),
+            # RandomVerticalFlip(p=0.3),
+            # RandomHorizontalFlip(p=0.3),
             Resize(final_size),
             Grayscale(num_output_channels=1),
             ToTensor(),
         ]
     )
 
-    return transform_train
+    transform_effective = A.Compose(
+        [
+            # A.RandomCrop(80, 80, p=0.5),
+            A.HorizontalFlip(p=0.25),
+            A.VerticalFlip(p=0.25),
+            A.Resize(final_size, final_size, p=1.0),
+            ToTensorV2(),
+        ]
+    )
+    return transform_effective
 
 
 def get_transform_test(final_size, channels=1):
@@ -79,4 +97,8 @@ def get_transform_test(final_size, channels=1):
         [Resize(final_size), Grayscale(num_output_channels=1), ToTensor(),]
     )
 
-    return transform_test
+    transform_effective = A.Compose(
+        [A.Resize(final_size, final_size, p=1.0), ToTensorV2()]
+    )
+
+    return transform_effective
