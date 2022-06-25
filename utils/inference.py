@@ -34,6 +34,7 @@ class Inference(object):
         labels_map,
         image_size,
         channels,
+        log_dir,
         destination_dir="data",
     ) -> None:
 
@@ -47,6 +48,7 @@ class Inference(object):
         self.labels_map = labels_map
         self.image_size = image_size
         self.channels = channels
+        self.log_dir = log_dir
 
     def to_one_hot_vector(self, label):
         b = np.zeros((label.shape[0], self.num_classes))
@@ -63,6 +65,7 @@ class Inference(object):
         label_pred_arr = []
         pred_arr = []
         plt.rcParams.update(plt.rcParamsDefault)
+        fig = plt.figure()
 
         correct = 0
         with torch.no_grad():
@@ -115,7 +118,7 @@ class Inference(object):
             fpr[i], tpr[i], _ = roc_curve(y_true_onehot[:, i], y_score[:, i])
             roc_auc[i] = auc(fpr[i], tpr[i])
 
-        self.inv_map = {v: k for k, v in self.testset.class_to_idx.items()}
+        self.inv_map = self.labels_map  # {v: k for k, v in self.labels_map.items()}
 
         # Compute micro-average ROC curve and ROC area
         fpr["micro"], tpr["micro"], _ = roc_curve(
@@ -145,7 +148,9 @@ class Inference(object):
         plt.ylabel("True Positive Rate")
         plt.title("Transformer ROC")
         plt.legend(loc="lower right")
+        plt.savefig(f"{self.log_dir}/roc.png", dpi=150)
         plt.show()
+        # fig.savefig(f"{self.log_dir}/roc.png", dpi=150)
 
     def plot_confusion_matrix(
         self, cm, classes, normalize=False, title="Confusion matrix", cmap=plt.cm.Blues
@@ -183,6 +188,7 @@ class Inference(object):
         plt.ylabel("True label")
         plt.xlabel("Predicted label")
         plt.tight_layout()
+        plt.savefig(f"{self.log_dir}/confusion_matrix.png", dpi=150)
         plt.show()
 
     def generate_plot_confusion_matrix(self):

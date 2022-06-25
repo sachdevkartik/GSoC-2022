@@ -86,3 +86,5 @@ def init_logging_handler(log_dir, current_time, extra=""):
 
     logging.getLogger("matplotlib.font_manager").disabled = True
 
+    os.makedirs(f"{log_dir}/{current_time}/checkpoint", exist_ok=True)
+

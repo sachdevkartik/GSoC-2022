@@ -36,6 +36,7 @@ def train(
         running_loss = 0
 
         for data, label in tqdm(train_loader):
+            # for step, (data, label) in loop:
             data = data.to(device)
             label = label.to(device)
 
@@ -43,9 +44,12 @@ def train(
             loss = criterion(output, label)
             epoch_loss += loss.item()
 
-            optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+            optimizer.zero_grad()
+            if use_lr_schedule:
+                # scheduler_plateau.step(epoch_val_loss)
+                scheduler_step.step()
 
         epoch_loss = epoch_loss / len(train_loader)
         all_epoch_loss.append(epoch_loss)
@@ -75,10 +79,6 @@ def train(
         logging.debug(
             f"Epoch : {epoch+1} - LR {optimizer.param_groups[0]['lr']:.8f} - loss : {epoch_loss:.4f} - val_loss : {epoch_val_loss:.4f} - val_acc: {epoch_val_accuracy:.4f} \n"
         )
-
-        if use_lr_schedule:
-            # scheduler_plateau.step(epoch_val_loss)
-            scheduler_step.step()
 
         if epoch_val_accuracy > best_accuracy:
             best_accuracy = epoch_val_accuracy
