@@ -1,7 +1,7 @@
 EQCVT_CONFIG = {
     "network_type": "eqcvt",
     "image_size": 129,
-    "batch_size": 256,
+    "batch_size": 32,
     "num_epochs": 15,
     "optimizer_config": {
         "weight_decay": 1e-7,
