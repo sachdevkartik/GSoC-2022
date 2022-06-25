@@ -7,6 +7,7 @@ from PIL import Image
 from config.data_config import DATASET
 import matplotlib.pyplot as plt
 import torch
+from torchvision.transforms import ToPILImage
 
 
 def download_dataset(
@@ -114,18 +115,24 @@ class DeepLenseDataset(Dataset):
     def __getitem__(self, index):
         image, label = self.imagefilename[index], self.labels[index]
 
-        image = np.load(image, allow_pickle=True)
+        image = np.load(image, allow_pickle=True)  # , mmap_mode='r'
         if label == 0:
             image = image[0]
-        # image = image / image.max() #normalizes data in range 0 - 255
+        image = (image - np.min(image)) / (np.max(image) - np.min(image))
+        image = np.expand_dims(image, axis=2)
+
+        # image = image / image.max()  # normalizes data in range 0 - 255
         # image = 255 * image
-        if self.channels == 3:
-            image = Image.fromarray(image.astype("uint8")).convert("RGB")
-        else:
-            image = Image.fromarray(image.astype("uint8"))  # .convert("RGB")
+        # image = (image - np.min(image))/(np.max(image) - np.min(image))
+        # if self.channels == 3:
+        #     image = Image.fromarray(image.astype("uint8")).convert("RGB")
+        # else:
+        #     image = Image.fromarray(image.astype("uint8"))  # .convert("RGB")
 
         if self.transform is not None:
-            image = self.transform(image)
+            transformed = self.transform(image=image)
+            image = transformed["image"]
+            image = torch.tensor(image, dtype=torch.float32)
         return image, label
 
     def __len__(self):
@@ -144,8 +151,110 @@ def visualize_samples(
         figure.add_subplot(rows, cols, i)
         plt.title(f"{labels_map[label]}")
         plt.axis("off")
-        # im = transforms.ToPILImage()(img)
+        im = ToPILImage()(img)
         img = img.squeeze()
         plt.imshow(img, cmap="gray")
         # plt.imshow(img)
     plt.show()
+
+
+class DeepLenseDataset_dataeff(Dataset):
+    # TODO: add val-loader + splitting
+    def __init__(
+        self,
+        destination_dir,
+        mode,
+        dataset_name,
+        transform=None,
+        download="False",
+        channels=1,
+    ):
+        assert mode in ["train", "test", "val"]
+
+        if mode == "train":
+            filename = f"{destination_dir}/{dataset_name}.tgz"
+            foldername = f"{destination_dir}/{dataset_name}"
+            # self.root_dir = foldername + "/train"
+
+        elif mode == "val":
+            filename = f"{destination_dir}/{dataset_name}.tgz"
+            foldername = f"{destination_dir}/{dataset_name}"
+            # self.root_dir = foldername + "/val"
+
+        else:
+            filename = f"{destination_dir}/{dataset_name}_test.tgz"
+            foldername = f"{destination_dir}/{dataset_name}_test"
+            # self.root_dir = foldername
+
+        url = DATASET[f"{dataset_name}"][f"{mode}_url"]
+
+        if download and not os.path.isdir(foldername) is True:
+            if not os.path.isfile(filename):
+                download_dataset(
+                    filename, url=url,
+                )
+            extract_split_dataset(filename, destination_dir)
+        else:
+            assert (
+                os.path.isdir(foldername) is True
+            ), "Dataset doesn't exists, set arg download to True!"
+
+            print("Dataset already exists")
+
+        self.root_dir = foldername
+
+        self.transform = transform
+        classes = os.listdir(
+            self.root_dir
+        )  # [join(self.root_dir, x).split('/')[3] for x in listdir(self.root_dir)]
+        classes.sort()
+        self.class_to_idx = {cls_name: i for i, cls_name in enumerate(classes)}
+        # self.imagefilename = []
+        self.labels = []
+        self.channels = channels
+
+        # TODO: make dynamic
+        if mode == "train":
+            num = 87525
+        elif mode == "test":
+            num = 15000
+
+        # if not os.path.exists(f"images_mmep_{mode}.npy"):
+
+        self.images_mmep = np.memmap(
+            f"images_mmep_{mode}.npy", dtype="int16", mode="w+", shape=(num, 150, 150),
+        )
+
+        self.labels_mmep = np.memmap(
+            f"labels_mmep_{mode}.npy", dtype="float64", mode="w+", shape=(num, 1)
+        )
+
+        w_index = 0
+        for i in classes:
+            for x in os.listdir(os.path.join(self.root_dir, i)):
+                self.imagefilename = os.path.join(self.root_dir, i, x)
+                image = np.load(self.imagefilename, allow_pickle=True)
+                label = self.class_to_idx[i]
+                if label == 0:
+                    image = image[0]
+                self.images_mmep[w_index, :] = image
+                self.labels_mmep[w_index] = label
+                self.labels.append(self.class_to_idx[i])
+                w_index += 1
+
+    def __getitem__(self, index):
+        image = np.asarray(self.images_mmep[index])
+        label = np.asarray(self.labels_mmep[index], dtype="int64")[0]
+
+        image = (image - np.min(image)) / (np.max(image) - np.min(image))
+        if self.channels == 3:
+            image = Image.fromarray(image.astype("uint8")).convert("RGB")
+        else:
+            image = Image.fromarray(image.astype("uint8"))  # .convert("RGB")
+
+        if self.transform is not None:
+            image = self.transform(image)
+        return image, label
+
+    def __len__(self):
+        return len(self.labels)
