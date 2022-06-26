@@ -1,8 +1,52 @@
 # __GSoC-2022__
-### __Ongoing GSoC project__ <br>
-Readme soon to be updated... 
+## __Ongoing GSoC project__ <br>
+<br>
+
+### __Equivariant Convolutional Vision Transformer__ ##
+
+An Equivariant Convolutional Vision Transformer is built for binary classification using PyTorch. Approach and strategy are discussed in [test2_e2c_vit.ipynb](./test2_e2c_vit.ipynb)
+
+* **Dataset**: The Dataset consists of simulated strong gravitational lensing images with and without substructure. 
+
+* **Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test2_e2c_vit.ipynb)
+
+* **Model Weights**: [e2cnn_vit_2022-04-04-23-41-30.pt](model/e2cnn_vit_2022-04-04-23-41-30.pt)
+
+* **Inference**: Please use [test2_e2cnn_vit_inference.ipynb](./test2_e2cnn_vit_inference.ipynb) file for inference.
+
+* **Results**:
+
+    | S.No | Metric | Value |
+    | --- | --- | --- |
+    | 1. | Best validation accuracy | 97.10% |
+    | 2. | AUC (with sub structure)  | 0.9961 |
+    | 3. | AUC (without sub structure)  | 0.9975 |
 
 <br>
+
+
+### __Convolutional Vision Transformer (CvT)__ ##
+
+An efficient Convolutional Vision Transformer (CvT) is built for binary classification using PyTorch. Approach and strategy are discussed in [test2.ipynb](./test2.ipynb)
+
+* **Dataset**: The Dataset consists of simulated strong gravitational lensing images with and without substructure. 
+
+* **Solution**: The notebook can be open on [GoogleColab](https://colab.research.google.com/github/sachdevkartik/GSoC-2022/blob/main/test2.ipynb)
+
+* **Model Weights**: [ConvTransformer_2022-04-05-21-20-09.pt](model/ConvTransformer_2022-03-15-13-40-54.pt)
+
+* **Inference**: Please use [test2_inference.ipynb](./test2_inference.ipynb) file for inference.
+
+* **Results**:
+
+  | S.No | Metric | Value |
+  | --- | --- | --- |
+  | 1. | Best validation accuracy | 98.12% |
+  | 2. | AUC (with sub structure)  | 0.9988 |
+  | 3. | AUC (without sub structure)  | 0.9989 |
+
+<br>
+
 <br>
 
 ## __Citation__
