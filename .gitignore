@@ -10,4 +10,4 @@
 *.tgz
 *.DS_Store
 *.npz
-
+*.pt
