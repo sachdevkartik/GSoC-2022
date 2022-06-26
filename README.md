@@ -1,5 +1,7 @@
 # __GSoC-2022__
-Solution for evaluation tests for GSoC DeepLense 2022. <br> 
+## __For ongoing GSoC project checkout the branch__:  [epic/official_project](https://github.com/sachdevkartik/GSoC-2022/tree/epic/official_project) <br> <br>
+
+This branch provides solution used for the application process for GSoC DeepLense 2022. <br>
 This repo solves the following tests:
 
 <br>
