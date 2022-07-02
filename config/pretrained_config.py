@@ -1,5 +1,5 @@
 PRETRAINED_CONFIG = {
-    "network_type": "convit_tiny",
+    "network_type": "crossformer",
     "pretrained": True,
     "image_size": 224,
     "batch_size": 32,
