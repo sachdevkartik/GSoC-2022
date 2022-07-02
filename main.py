@@ -7,7 +7,6 @@ import logging
 import time
 import copy
 from turtle import down
-import gdown
 
 import matplotlib.pyplot as plt
 import numpy as np
