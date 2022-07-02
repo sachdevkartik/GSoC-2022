@@ -36,8 +36,20 @@ from utils.inference import Inference
 from argparse import ArgumentParser
 from config.data_config import DATASET
 from config.eqcvt_config import EQCVT_CONFIG
+from config.pretrained_config import PRETRAINED_CONFIG
 from utils.augmentation import get_transform_test, get_transform_train
 from torch.utils.data import DataLoader
+import timm
+from torchvision import models
+from models.cnn_zoo import Model, ConViT
+import math
+from transformers import get_cosine_schedule_with_warmup
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader, Dataset, random_split
+from models.transformer_zoo import GetCrossFormer
+
 
 parser = ArgumentParser()
 parser.add_argument(
@@ -66,7 +78,7 @@ def main():
 
     classes = DATASET[f"{dataset_name}"]["classes"]
 
-    train_config = EQCVT_CONFIG
+    train_config = PRETRAINED_CONFIG
     network_type = train_config["network_type"]
     network_config = train_config["network_config"]
     image_size = train_config["image_size"]
@@ -79,36 +91,44 @@ def main():
         dataset_dir,
         "train",
         dataset_name,
-        transform=get_transform_train(upsample_size=387, final_size=129),
+        transform=get_transform_train(
+            upsample_size=387, final_size=PRETRAINED_CONFIG["image_size"], channels=1
+        ),
         download=True,
-    )  # get_transform_train()
+        channels=3,
+    )
 
-    testset = DeepLenseDataset(
-        dataset_dir,
-        "test",
-        dataset_name,
-        transform=get_transform_test(final_size=129),
-        download=True,
-    )  # transform_test
+    split_ratio = 0.25
+    valid_len = int(split_ratio * len(trainset))
+    train_len = len(trainset) - valid_len
+    trainset, testset = random_split(trainset, [train_len, valid_len])
 
     seed_everything(seed=42)
     device = get_device(use_cuda=use_cuda, cuda_idx=0)
 
     # logging
     current_time = time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())
-    log_dir = "logger"
-    init_logging_handler(log_dir, current_time)
+    log_dir_base = "logger"
+    log_dir = f"{log_dir_base}/{current_time}"
+    init_logging_handler(log_dir_base, current_time)
 
     PATH = os.path.join(f"{log_dir}/checkpoint", f"{network_type}_{current_time}.pt")
 
     train_loader = DataLoader(
-        dataset=trainset, batch_size=train_config["batch_size"], shuffle=True
+        dataset=trainset,
+        batch_size=train_config["batch_size"],
+        shuffle=True,
+        num_workers=12,
     )
     test_loader = DataLoader(
-        dataset=testset, batch_size=train_config["batch_size"], shuffle=True
+        dataset=testset,
+        batch_size=train_config["batch_size"],
+        shuffle=True,
+        num_workers=12,
     )
 
-    visualize_samples(dataset=trainset, labels_map=classes)
+    sample = next(iter(train_loader))
+    print(sample[0].shape)
 
     num_classes = len(classes)  # number of classes to be classified
     # image size (129x129)
@@ -116,24 +136,13 @@ def main():
     print(f"Train Data: {len(trainset)}")
     print(f"Val Data: {len(testset)}")
 
-    model = EqCvT(
-        channels=train_config["channels"],
-        num_classes=num_classes,
-        s1_emb_dim=network_config["s1_emb_dim"],  # stage 1 - (same as above)
-        s1_emb_kernel=network_config["s1_emb_kernel"],
-        s1_emb_stride=network_config["s1_emb_stride"],
-        s1_proj_kernel=network_config["s1_proj_kernel"],
-        s1_kv_proj_stride=network_config["s1_kv_proj_stride"],
-        s1_heads=network_config["s1_heads"],
-        s1_depth=network_config["s1_depth"],
-        s1_mlp_mult=network_config["s1_mlp_mult"],
-        mlp_last=network_config["mlp_last"],
-        dropout=network_config["dropout"],
-        sym_group=network_config["sym_group"],
-        N=network_config["N"],
-        image_size=image_size,
-        e2cc_mult_1=network_config["e2cc_mult_1"],
-    ).to(device)
+    # Lightweight CvT
+
+    model = GetCrossFormer(
+        num_channels=train_config["channels"], num_classes=num_classes
+    )
+
+    summary(model, input_size=(train_config["batch_size"], 1, image_size, image_size))
 
     # print(v)
     def count_parameters(model):
@@ -153,24 +162,23 @@ def main():
         weight_decay=optimizer_config["weight_decay"],
     )
 
-    # scheduler
-    step_lr = train_config["lr_schedule_config"]["step_lr"]
-    reduce_on_plateau = train_config["lr_schedule_config"]["reduce_on_plateau"]
+    # optimizer
+    optimizer = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+    epochs = 10
+    warmup_epochs = 3
+    num_train_steps = math.ceil(len(train_loader))
+    num_warmup_steps = num_train_steps * warmup_epochs
+    num_training_steps = int(num_train_steps * epochs)
 
-    scheduler_plateau = ReduceLROnPlateau(
+    # learning rate scheduler
+    cosine_scheduler = get_cosine_schedule_with_warmup(
         optimizer,
-        "min",
-        factor=reduce_on_plateau["factor"],
-        patience=reduce_on_plateau["patience"],
-        threshold=reduce_on_plateau["threshold"],
-        verbose=reduce_on_plateau["verbose"],
-    )
-    scheduler_step = StepLR(
-        optimizer, step_size=step_lr["step_size"], gamma=step_lr["gamma"]
+        num_warmup_steps=num_warmup_steps,
+        num_training_steps=num_training_steps,
     )
 
     train(
-        epochs=train_config["num_epochs"],
+        epochs=epochs,  # train_config["num_epochs"],
         model=model,
         device=device,
         train_loader=train_loader,
@@ -178,7 +186,7 @@ def main():
         criterion=criterion,
         optimizer=optimizer,
         use_lr_schedule=train_config["lr_schedule_config"]["use_lr_schedule"],
-        scheduler_step=scheduler_step,
+        scheduler_step=cosine_scheduler,
         path=PATH,
     )
 
