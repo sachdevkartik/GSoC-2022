@@ -1,5 +1,7 @@
 
 # Usage: pip install -r requirements.txt
+# updgrade pip
+# pip3 install --user --upgrade -r requirements.txt
 
 # Base 
 matplotlib>=3.2.2
