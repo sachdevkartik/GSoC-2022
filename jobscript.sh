@@ -1,3 +1,5 @@
+#!${HPCBASH}/bin/zsh
+
 # ask for eight tasks
 #SBATCH --ntasks=8
  
