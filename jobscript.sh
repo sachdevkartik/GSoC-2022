@@ -12,6 +12,9 @@
 # name the job
 #SBATCH --job-name=DEEPLENSE
 
+# declare the merged STDOUT/STDERR file
+#SBATCH --output=output.%J.txt
+
 #SBATCH --time=00:30:30
  
 ### beginning of executable commands
