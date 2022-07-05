@@ -1,3 +1,5 @@
+import math
+
 PRETRAINED_CONFIG = {
     "network_type": "crossformer",
     "pretrained": True,
@@ -5,10 +7,12 @@ PRETRAINED_CONFIG = {
     "batch_size": 32,
     "num_epochs": 10,
     "optimizer_config": {
-        "weight_decay": 1e-7,
-        "lr": 1e-4,
+        "name": "AdamW",
+        "weight_decay": 1e-4,
+        "lr": 1e-3,
         "momentum": 0.9,
         "betas": (0.9, 0.999),
+        "warmup_epochs": 3,
     },
     "lr_schedule_config": {
         "use_lr_schedule": True,
