@@ -20,7 +20,7 @@ from torchinfo import summary
 from tqdm.notebook import tqdm
 from sklearn.metrics import roc_curve, auc, confusion_matrix
 
-from models.cvt import CvT, EqCvT
+# from models.cvt import CvT, EqCvT
 from typing import *
 from utils.util import (
     make_directories,
