@@ -5,6 +5,7 @@ import copy
 import torch
 from tqdm.notebook import tqdm
 from typing import *
+import wandb
 
 
 def train(
@@ -18,7 +19,10 @@ def train(
     use_lr_schedule,
     scheduler_step,
     path,
+    log_freq=100,
 ):
+    wandb.watch(model, criterion, log="all", log_freq=log_freq)
+    steps = 0
     all_train_loss = []
     all_val_loss = []
     all_train_accuracy = []
@@ -37,6 +41,7 @@ def train(
 
         for data, label in tqdm(train_loader):
             # for step, (data, label) in loop:
+            steps += 1
             data = data.to(device)
             label = label.to(device)
 
@@ -79,6 +84,16 @@ def train(
         logging.debug(
             f"Epoch : {epoch+1} - LR {optimizer.param_groups[0]['lr']:.8f} - loss : {epoch_loss:.4f} - val_loss : {epoch_val_loss:.4f} - val_acc: {epoch_val_accuracy:.4f} \n"
         )
+
+        if steps % log_freq == 0:
+            log_dict = {
+                "epoch": epoch,
+                "steps": steps,
+                "train/loss": loss,
+                "val/loss": epoch_val_loss,
+                "val/accuracy": epoch_val_accuracy,
+            }
+            wandb.log({"loss": loss})
 
         if epoch_val_accuracy > best_accuracy:
             best_accuracy = epoch_val_accuracy
