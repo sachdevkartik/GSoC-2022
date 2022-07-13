@@ -3,7 +3,7 @@ from __future__ import print_function
 import logging
 import copy
 import torch
-from tqdm.notebook import tqdm
+from tqdm import tqdm
 from typing import *
 import wandb
 
@@ -19,9 +19,15 @@ def train(
     use_lr_schedule,
     scheduler_step,
     path,
+    config,
+    dataset_name,
     log_freq=100,
 ):
+    wandb.init(
+        config=config, group=dataset_name, job_type="train", mode="disabled"
+    )  # ,
     wandb.watch(model, criterion, log="all", log_freq=log_freq)
+
     steps = 0
     all_train_loss = []
     all_val_loss = []
@@ -31,6 +37,7 @@ def train(
     all_epoch_loss = []
 
     best_accuracy = 0
+    model.to(device)
 
     for epoch in range(epochs):
         model.train()
@@ -85,17 +92,21 @@ def train(
             f"Epoch : {epoch+1} - LR {optimizer.param_groups[0]['lr']:.8f} - loss : {epoch_loss:.4f} - val_loss : {epoch_val_loss:.4f} - val_acc: {epoch_val_accuracy:.4f} \n"
         )
 
-        if steps % log_freq == 0:
-            log_dict = {
-                "epoch": epoch,
-                "steps": steps,
-                "train/loss": loss,
-                "val/loss": epoch_val_loss,
-                "val/accuracy": epoch_val_accuracy,
-            }
-            wandb.log({"loss": loss})
+        # logging frequency = each epoch
+        log_dict = {
+            "epoch": epoch,
+            "steps": steps,
+            "train/loss": loss,
+            "val/loss": epoch_val_loss,
+            "val/accuracy": epoch_val_accuracy,
+        }
+        wandb.log(log_dict, step=steps)
 
         if epoch_val_accuracy > best_accuracy:
             best_accuracy = epoch_val_accuracy
             best_model = copy.deepcopy(model)
+            wandb.run.summary["best_accuracy"] = epoch_val_accuracy
+            wandb.run.summary["best_epoch"] = epoch
+            wandb.run.summary["best_step"] = steps
+            wandb.save(path)
             torch.save(best_model.state_dict(), path)

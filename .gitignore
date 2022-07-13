@@ -4,6 +4,7 @@
 **/dataset/*
 /data/*
 *.ipynb_checkpoints/*
+wandb/*
 
 # Files to ignore
 *.zip

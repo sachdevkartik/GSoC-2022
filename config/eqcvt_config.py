@@ -1,13 +1,15 @@
 EQCVT_CONFIG = {
     "network_type": "eqcvt",
-    "image_size": 129,
-    "batch_size": 32,
+    "image_size": 224,
+    "batch_size": 4,
     "num_epochs": 15,
     "optimizer_config": {
-        "weight_decay": 1e-7,
-        "lr": 1e-4,
+        "name": "AdamW",
+        "weight_decay": 1e-4,
+        "lr": 1e-3,
         "momentum": 0.9,
         "betas": (0.9, 0.999),
+        "warmup_epoch": 3,
     },
     "lr_schedule_config": {
         "use_lr_schedule": True,

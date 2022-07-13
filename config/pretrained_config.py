@@ -1,18 +1,18 @@
 import math
 
 PRETRAINED_CONFIG = {
-    "network_type": "crossformer",
+    "network_type": "PiT",
     "pretrained": True,
     "image_size": 224,
     "batch_size": 32,
-    "num_epochs": 10,
+    "num_epochs": 15,
     "optimizer_config": {
         "name": "AdamW",
-        "weight_decay": 1e-4,
-        "lr": 1e-3,
+        "weight_decay": 0.01,
+        "lr": 0.001,
         "momentum": 0.9,
         "betas": (0.9, 0.999),
-        "warmup_epochs": 3,
+        "warmup_epoch": 3,
     },
     "lr_schedule_config": {
         "use_lr_schedule": True,

@@ -17,7 +17,6 @@ import torch.optim as optim
 from PIL import Image
 from torch.optim.lr_scheduler import StepLR, ReduceLROnPlateau
 from torchinfo import summary
-from tqdm.notebook import tqdm
 from sklearn.metrics import roc_curve, auc, confusion_matrix
 
 # from models.cvt import CvT, EqCvT
@@ -46,8 +45,15 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from torch.utils.data import DataLoader, Dataset
 from torch.utils.data import DataLoader, Dataset, random_split
-from models.transformer_zoo import GetCrossFormer
+from models.transformer_zoo import (
+    GetCrossFormer,
+    GetTwinsSVT,
+    GetMobileViT,
+    GetLeViT,
+    GetPiT,
+)
 
+import wandb
 
 parser = ArgumentParser()
 parser.add_argument(
@@ -62,6 +68,10 @@ parser.add_argument(
     "--save", metavar="XXX/YYY", type=str, default="data", help="destination of dataset"
 )
 
+parser.add_argument(
+    "--num_workers", metavar="1", type=int, default=1, help="number of workers"
+)
+
 parser.add_argument("--cuda", action="store_true")
 parser.add_argument("--no-cuda", dest="cuda", action="store_false")
 parser.set_defaults(cuda=True)
@@ -73,6 +83,7 @@ def main():
     dataset_name = args.dataset_name
     dataset_dir = args.save
     use_cuda = args.cuda
+    num_workers = args.num_workers
 
     classes = DATASET[f"{dataset_name}"]["classes"]
 
@@ -90,10 +101,12 @@ def main():
         "train",
         dataset_name,
         transform=get_transform_train(
-            upsample_size=387, final_size=PRETRAINED_CONFIG["image_size"], channels=1
+            upsample_size=387,
+            final_size=train_config["image_size"],
+            channels=train_config["channels"],
         ),
         download=True,
-        channels=3,
+        channels=train_config["channels"],
     )
 
     split_ratio = 0.25
@@ -116,13 +129,13 @@ def main():
         dataset=trainset,
         batch_size=train_config["batch_size"],
         shuffle=True,
-        num_workers=12,
+        num_workers=num_workers,
     )
     test_loader = DataLoader(
         dataset=testset,
         batch_size=train_config["batch_size"],
         shuffle=True,
-        num_workers=12,
+        num_workers=num_workers,
     )
 
     sample = next(iter(train_loader))
@@ -140,25 +153,19 @@ def main():
         num_channels=train_config["channels"], num_classes=num_classes
     )
 
-    summary(model, input_size=(train_config["batch_size"], 1, image_size, image_size))
+    print(
+        summary(
+            model, input_size=(train_config["batch_size"], 1, image_size, image_size)
+        )
+    )
 
-    # print(v)
     def count_parameters(model):
         return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
     print("Parameter count:", count_parameters(model))
-    print("\n", model)
 
     # loss function
     criterion = nn.CrossEntropyLoss()
-
-    # optimizer
-    optimizer = optim.Adam(
-        model.parameters(),
-        lr=optimizer_config["lr"],
-        betas=optimizer_config["betas"],
-        weight_decay=optimizer_config["weight_decay"],
-    )
 
     # optimizer
     optimizer = optim.AdamW(
@@ -191,6 +198,9 @@ def main():
         use_lr_schedule=train_config["lr_schedule_config"]["use_lr_schedule"],
         scheduler_step=cosine_scheduler,
         path=PATH,
+        log_freq=20,
+        config=train_config,
+        dataset_name=dataset_name,
     )
 
 

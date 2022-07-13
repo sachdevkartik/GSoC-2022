@@ -132,7 +132,9 @@ class DeepLenseDataset(Dataset):
         if self.transform is not None:
             transformed = self.transform(image=image)
             image = transformed["image"]
-            image = torch.tensor(image, dtype=torch.float32)
+            image = (
+                image.float().clone().detach()  # .requires_grad_(True)
+            )  # torch.tensor(image, dtype=torch.float32)
         return image, label
 
     def __len__(self):
