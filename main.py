@@ -48,7 +48,6 @@ from torch.utils.data import DataLoader, Dataset, random_split
 from models.transformer_zoo import (
     GetCrossFormer,
     GetTwinsSVT,
-    GetMobileViT,
     GetLeViT,
     GetPiT,
 )

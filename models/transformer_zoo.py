@@ -1,7 +1,7 @@
-from crossformer import CrossFormer
-from twins_svt import TwinsSVT
-from levit import LeViT
-from pit import PiT
+from .crossformer import CrossFormer
+from .twins_svt import TwinsSVT
+from .levit import LeViT
+from .pit import PiT
 
 
 def GetCrossFormer(num_classes, num_channels):
