@@ -21,6 +21,8 @@ from torchvision.transforms import (
 from sklearn.metrics import roc_curve, auc, confusion_matrix
 from utils.dataset import DeepLenseDataset
 
+plt.use("Agg")
+
 
 class Inference(object):
     def __init__(

@@ -202,6 +202,22 @@ def main():
         dataset_name=dataset_name,
     )
 
+    infer_obj = Inference(
+        model,
+        test_loader,
+        device,
+        num_classes,
+        testset,
+        dataset_name,
+        labels_map=classes,
+        image_size=image_size,
+        channels=train_config["channels"],
+        destination_dir="data",
+        log_dir=log_dir,  # log_dir
+    )
+    infer_obj.infer_plot_roc()
+    infer_obj.generate_plot_confusion_matrix()
+
 
 if __name__ == "__main__":
     main()
