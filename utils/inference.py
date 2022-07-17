@@ -4,6 +4,7 @@ from __future__ import print_function
 import os
 from os.path import join
 import matplotlib.pyplot as plt
+import matplotlib
 import numpy as np
 import torch
 from PIL import Image
@@ -21,7 +22,7 @@ from torchvision.transforms import (
 from sklearn.metrics import roc_curve, auc, confusion_matrix
 from utils.dataset import DeepLenseDataset
 
-plt.use("Agg")
+matplotlib.use("Agg")
 
 
 class Inference(object):
