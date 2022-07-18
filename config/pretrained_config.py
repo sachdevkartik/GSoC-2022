@@ -4,7 +4,7 @@ PRETRAINED_CONFIG = {
     "network_type": "T2TViT",
     "pretrained": False,
     "image_size": 224,
-    "batch_size": 8,
+    "batch_size": 128,
     "num_epochs": 3,
     "optimizer_config": {
         "name": "AdamW",
@@ -33,10 +33,6 @@ PRETRAINED_CONFIG = {
         "heads": 5,
         "mlp_dim": 256,
         "num_classes": 3,
-        "t2t_layers": (
-            (7, 4),
-            (3, 2),
-            (3, 2),
-        ),
+        "t2t_layers": ((7, 4), (3, 2), (3, 2),),
     },
 }
