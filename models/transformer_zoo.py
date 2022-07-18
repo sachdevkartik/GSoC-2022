@@ -109,7 +109,7 @@ def GetCCT(num_classes, num_channels, img_size):
     return model
 
 
-def GetPiT(num_classes, num_channels, img_size):
+def GetT2TViT(num_classes, num_channels, img_size):
 
     model = T2TViT(
         dim=512,
