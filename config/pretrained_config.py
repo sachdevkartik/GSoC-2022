@@ -1,7 +1,7 @@
 import math
 
 PRETRAINED_CONFIG = {
-    "network_type": "CCT",
+    "network_type": "T2TViT",
     "pretrained": False,
     "image_size": 224,
     "batch_size": 8,
@@ -26,20 +26,17 @@ PRETRAINED_CONFIG = {
     },
     "channels": 1,
     "network_config": {
-        "img_size": (224, 224),
-        "embedding_dim": 128,
-        "n_conv_layers": 2,
-        "kernel_size": 7,
-        "stride": 2,
-        "padding": 3,
-        "pooling_kernel_size": 3,
-        "pooling_stride" : 2,
-        "pooling_padding" : 1,
-        "num_layers": 5,
-        "num_heads": 2,
-        "mlp_radio": 2.0,
+        "dim": 256,
+        "image_size": 224,
+        "channels": 1,
+        "depth": 6,
+        "heads": 5,
+        "mlp_dim": 256,
         "num_classes": 3,
-        "positional_embedding": "learnable",  # ['sine', 'learnable', 'none']
-        "n_input_channels": 1,
+        "t2t_layers": (
+            (7, 4),
+            (3, 2),
+            (3, 2),
+        ),
     },
 }

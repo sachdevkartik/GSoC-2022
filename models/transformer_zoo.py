@@ -112,12 +112,12 @@ def GetCCT(num_classes, num_channels, img_size):
 def GetT2TViT(num_classes, num_channels, img_size):
 
     model = T2TViT(
-        dim=512,
+        dim=256,
         image_size=img_size,
         channels=num_channels,
-        depth=5,
-        heads=8,
-        mlp_dim=512,
+        depth=6,
+        heads=5,
+        mlp_dim=256,
         num_classes=num_classes,
         t2t_layers=(
             (7, 4),

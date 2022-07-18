@@ -45,7 +45,14 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from torch.utils.data import DataLoader, Dataset
 from torch.utils.data import DataLoader, Dataset, random_split
-from models.transformer_zoo import GetCrossFormer, GetTwinsSVT, GetLeViT, GetPiT, GetCCT
+from models.transformer_zoo import (
+    GetCrossFormer,
+    GetTwinsSVT,
+    GetLeViT,
+    GetPiT,
+    GetCCT,
+    GetT2TViT,
+)
 import json
 
 import wandb
@@ -147,7 +154,7 @@ def main():
 
     # Lightweight CvT
 
-    model = GetCCT(
+    model = GetT2TViT(
         num_channels=train_config["channels"],
         num_classes=num_classes,
         img_size=image_size,
