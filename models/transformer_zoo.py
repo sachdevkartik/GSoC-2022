@@ -2,6 +2,8 @@ from .crossformer import CrossFormer
 from .twins_svt import TwinsSVT
 from .levit import LeViT
 from .pit import PiT
+from vit_pytorch.cct import CCT
+from vit_pytorch.t2t import T2TViT
 
 
 def GetCrossFormer(num_classes, num_channels):
@@ -82,3 +84,47 @@ def GetPiT(num_classes, num_channels, img_size):
         channels=num_channels,
     )
     return model
+
+
+def GetCCT(num_classes, num_channels, img_size):
+
+    model = CCT(
+        img_size=img_size,
+        embedding_dim=256,
+        n_conv_layers=2,
+        kernel_size=7,
+        stride=2,
+        padding=3,
+        pooling_kernel_size=3,
+        pooling_stride=2,
+        pooling_padding=1,
+        num_layers=6,
+        num_heads=4,
+        mlp_radio=2.0,
+        num_classes=num_classes,
+        positional_embedding="learnable",  # ['sine', 'learnable', 'none']
+        n_input_channels=num_channels,
+    )
+
+    return model
+
+
+def GetPiT(num_classes, num_channels, img_size):
+
+    model = T2TViT(
+        dim=512,
+        image_size=img_size,
+        channels=num_channels,
+        depth=5,
+        heads=8,
+        mlp_dim=512,
+        num_classes=num_classes,
+        t2t_layers=(
+            (7, 4),
+            (3, 2),
+            (3, 2),
+        ),  # tuples of the kernel size and stride of each consecutive layers of the initial token to token module
+    )
+
+    return model
+

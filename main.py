@@ -45,12 +45,8 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from torch.utils.data import DataLoader, Dataset
 from torch.utils.data import DataLoader, Dataset, random_split
-from models.transformer_zoo import (
-    GetCrossFormer,
-    GetTwinsSVT,
-    GetLeViT,
-    GetPiT,
-)
+from models.transformer_zoo import GetCrossFormer, GetTwinsSVT, GetLeViT, GetPiT, GetCCT
+import json
 
 import wandb
 
@@ -122,6 +118,9 @@ def main():
     log_dir = f"{log_dir_base}/{current_time}"
     init_logging_handler(log_dir_base, current_time)
 
+    with open(f"{log_dir}/config.json", "w") as fp:
+        json.dump(train_config, fp)
+
     PATH = os.path.join(f"{log_dir}/checkpoint", f"{network_type}_{current_time}.pt")
 
     train_loader = DataLoader(
@@ -148,8 +147,10 @@ def main():
 
     # Lightweight CvT
 
-    model = GetCrossFormer(
-        num_channels=train_config["channels"], num_classes=num_classes
+    model = GetCCT(
+        num_channels=train_config["channels"],
+        num_classes=num_classes,
+        img_size=image_size,
     )
 
     print(

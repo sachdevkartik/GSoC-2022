@@ -1,10 +1,10 @@
 import math
 
 PRETRAINED_CONFIG = {
-    "network_type": "PiT",
-    "pretrained": True,
+    "network_type": "CCT",
+    "pretrained": False,
     "image_size": 224,
-    "batch_size": 128,
+    "batch_size": 8,
     "num_epochs": 3,
     "optimizer_config": {
         "name": "AdamW",
@@ -26,18 +26,20 @@ PRETRAINED_CONFIG = {
     },
     "channels": 1,
     "network_config": {
-        "s1_emb_dim": 32,  # stage 1 - (same as above)
-        "s1_emb_kernel": 3,
-        "s1_emb_stride": 2,
-        "s1_proj_kernel": 3,
-        "s1_kv_proj_stride": 2,
-        "s1_heads": 2,
-        "s1_depth": 2,
-        "s1_mlp_mult": 2,
-        "mlp_last": 64,
-        "dropout": 0.1,
-        "sym_group": "Circular",
-        "N": 4,
-        "e2cc_mult_1": 20,
+        "img_size": (224, 224),
+        "embedding_dim": 128,
+        "n_conv_layers": 2,
+        "kernel_size": 7,
+        "stride": 2,
+        "padding": 3,
+        "pooling_kernel_size": 3,
+        "pooling_stride" : 2,
+        "pooling_padding" : 1,
+        "num_layers": 5,
+        "num_heads": 2,
+        "mlp_radio": 2.0,
+        "num_classes": 3,
+        "positional_embedding": "learnable",  # ['sine', 'learnable', 'none']
+        "n_input_channels": 1,
     },
 }
