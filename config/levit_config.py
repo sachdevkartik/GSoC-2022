@@ -1,7 +1,5 @@
-import math
-
-PRETRAINED_CONFIG = {
-    "network_type": "T2TViT",
+LEVIT_CONFIG = {
+    "network_type": "LeViT",
     "pretrained": False,
     "image_size": 224,
     "batch_size": 128,
@@ -26,10 +24,11 @@ PRETRAINED_CONFIG = {
     },
     "channels": 1,
     "network_config": {
-        "dim": 256,
-        "depth": 6,
-        "heads": 5,
-        "mlp_dim": 256,
-        "t2t_layers": ((7, 4), (3, 2), (3, 2),),
+        "stages": 3,  # number of stages
+        "dim": (64, 128, 128),  # dimensions at each stage
+        "depth": 5,  # transformer of depth 4 at each stage
+        "heads": (2, 4, 5),  # heads at each stage
+        "mlp_mult": 2,
+        "dropout": 0.1,
     },
 }
