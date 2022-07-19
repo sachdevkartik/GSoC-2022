@@ -93,7 +93,7 @@ class DeepLenseDataset(Dataset):
                 os.path.isdir(foldername) is True
             ), "Dataset doesn't exists, set arg download to True!"
 
-            print("Dataset already exists")
+            print(f"{dataset_name} dataset already exists")
 
         self.root_dir = foldername
 
