@@ -23,9 +23,7 @@ def train(
     dataset_name,
     log_freq=100,
 ):
-    wandb.init(
-        config=config, group=dataset_name, job_type="train", mode="disabled"
-    )  # ,
+    wandb.init(config=config, group=dataset_name, job_type="train")  # ,mode="disabled"
     wandb.watch(model, criterion, log="all", log_freq=log_freq)
 
     steps = 0
