@@ -3,7 +3,7 @@ CCT_CONFIG = {
     "pretrained": False,
     "image_size": 224,
     "batch_size": 128,
-    "num_epochs": 3,
+    "num_epochs": 15,
     "optimizer_config": {
         "name": "AdamW",
         "weight_decay": 0.01,
