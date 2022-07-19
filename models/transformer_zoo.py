@@ -128,7 +128,7 @@ def GetT2TViT(num_classes, num_channels, img_size, **kwargs):
 
 
 def TransformerModels(transformer_type, num_classes, num_channels, img_size, **kwargs):
-    assert transformer_type in ["CCT", "TwinsSVT", "LeViT", "CaiT", "CrossViT"]
+    assert transformer_type in ["CCT", "TwinsSVT", "LeViT", "CaiT", "CrossViT", "PiT"]
 
     if transformer_type == "CCT":
         model = CCT(
@@ -229,5 +229,20 @@ def TransformerModels(transformer_type, num_classes, num_channels, img_size, **k
             emb_dropout=kwargs["emb_dropout"],
         )
 
+    elif transformer_type == "PiT":
+        model = PiT(
+            image_size=img_size,
+            num_classes=num_classes,
+            channels=num_channels,
+            patch_size=kwargs["patch_size"],
+            dim=kwargs["dim"],
+            depth=kwargs["depth"],
+            heads=kwargs["heads"],
+            mlp_dim=kwargs["mlp_dim"],
+            dropout=kwargs["dropout"],
+            emb_dropout=kwargs["emb_dropout"],
+        )
+
     return model
+
 
