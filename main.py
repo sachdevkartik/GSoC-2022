@@ -52,7 +52,13 @@ from models.transformer_zoo import (
     GetPiT,
     GetCCT,
     GetT2TViT,
+    TransformerModels,
 )
+
+from config.cct_config import CCT_CONFIG
+from config.twinssvt_config import TWINSSVT_CONFIG
+from config.levit_config import LEVIT_CONFIG
+
 import json
 
 import wandb
@@ -74,8 +80,18 @@ parser.add_argument(
     "--num_workers", metavar="1", type=int, default=1, help="number of workers"
 )
 
-parser.add_argument("--cuda", action="store_true")
-parser.add_argument("--no-cuda", dest="cuda", action="store_false")
+parser.add_argument(
+    "--train_config",
+    type=str,
+    default="CCT",
+    help="transformer config",
+    choices=["CCT", "TwinsSVT", "LeViT"],
+)
+
+parser.add_argument("--cuda", action="store_true", help="whether to use cuda")
+parser.add_argument(
+    "--no-cuda", dest="cuda", action="store_false", help="not to use cuda"
+)
 parser.set_defaults(cuda=True)
 
 args = parser.parse_args()
@@ -86,10 +102,17 @@ def main():
     dataset_dir = args.save
     use_cuda = args.cuda
     num_workers = args.num_workers
+    train_config_name = args.train_config
 
     classes = DATASET[f"{dataset_name}"]["classes"]
 
-    train_config = PRETRAINED_CONFIG
+    if train_config_name == "CCT":
+        train_config = CCT_CONFIG
+    elif train_config_name == "TwinsSVT":
+        train_config = TWINSSVT_CONFIG
+    elif train_config_name == "LeViT":
+        train_config = LEVIT_CONFIG
+
     network_type = train_config["network_type"]
     network_config = train_config["network_config"]
     image_size = train_config["image_size"]
@@ -125,10 +148,9 @@ def main():
     log_dir = f"{log_dir_base}/{current_time}"
     init_logging_handler(log_dir_base, current_time)
 
-    with open(f"{log_dir}/config.json", "w") as fp:
-        json.dump(train_config, fp)
-
-    PATH = os.path.join(f"{log_dir}/checkpoint", f"{network_type}_{current_time}.pt")
+    PATH = os.path.join(
+        f"{log_dir}/checkpoint", f"{network_type}_{dataset_name}_{current_time}.pt"
+    )
 
     train_loader = DataLoader(
         dataset=trainset,
@@ -152,19 +174,16 @@ def main():
     print(f"Train Data: {len(trainset)}")
     print(f"Val Data: {len(testset)}")
 
-    # Lightweight CvT
-
-    model = GetT2TViT(
+    # Transformer model
+    model = TransformerModels(
+        transformer_type=train_config["network_type"],
         num_channels=train_config["channels"],
         num_classes=num_classes,
         img_size=image_size,
+        **train_config["network_config"],
     )
 
-    print(
-        summary(
-            model, input_size=(train_config["batch_size"], 1, image_size, image_size)
-        )
-    )
+    summary(model, input_size=(train_config["batch_size"], 1, image_size, image_size))
 
     def count_parameters(model):
         return sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -193,6 +212,18 @@ def main():
         num_warmup_steps=num_warmup_steps,
         num_training_steps=num_training_steps,
     )
+
+    train_config["dataset_name"] = dataset_name
+    train_config["lr_schedule_config"]["cosine_scheduler"] = {}
+    train_config["lr_schedule_config"]["cosine_scheduler"][
+        "num_warmup_steps"
+    ] = num_warmup_steps
+    train_config["lr_schedule_config"]["cosine_scheduler"]["num_training_steps"] = int(
+        num_training_steps
+    )
+
+    with open(f"{log_dir}/config.json", "w") as fp:
+        json.dump(train_config, fp)
 
     train(
         epochs=epochs,  # train_config["num_epochs"],
