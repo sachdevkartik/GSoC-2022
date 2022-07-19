@@ -109,22 +109,84 @@ def GetCCT(num_classes, num_channels, img_size):
     return model
 
 
-def GetT2TViT(num_classes, num_channels, img_size):
+def GetT2TViT(num_classes, num_channels, img_size, **kwargs):
 
     model = T2TViT(
-        dim=256,
+        dim=kwargs["dim"],
         image_size=img_size,
         channels=num_channels,
-        depth=6,
-        heads=5,
-        mlp_dim=256,
+        depth=kwargs["depth"],
+        heads=kwargs["heads"],
+        mlp_dim=kwargs["mlp_dim"],
         num_classes=num_classes,
-        t2t_layers=(
-            (7, 4),
-            (3, 2),
-            (3, 2),
-        ),  # tuples of the kernel size and stride of each consecutive layers of the initial token to token module
+        t2t_layers=kwargs["t2t_layers"],
     )
 
     return model
 
+
+def TransformerModels(transformer_type, num_classes, num_channels, img_size, **kwargs):
+    assert transformer_type in ["CCT", "TwinsSVT", "LeViT"]
+
+    if transformer_type == "CCT":
+        model = CCT(
+            img_size=img_size,
+            embedding_dim=kwargs["embedding_dim"],
+            n_conv_layers=kwargs["n_conv_layers"],
+            kernel_size=kwargs["kernel_size"],
+            stride=kwargs["stride"],
+            padding=kwargs["padding"],
+            pooling_kernel_size=kwargs["pooling_kernel_size"],
+            pooling_stride=kwargs["pooling_stride"],
+            pooling_padding=kwargs["pooling_padding"],
+            num_layers=kwargs["num_layers"],
+            num_heads=kwargs["num_heads"],
+            mlp_ratio=kwargs["mlp_ratio"],
+            num_classes=num_classes,
+            positional_embedding=kwargs["positional_embedding"],
+            n_input_channels=num_channels,
+        )
+
+    elif transformer_type == "TwinsSVT":
+        model = TwinsSVT(
+            num_classes=num_classes,
+            channels=num_channels,
+            s1_emb_dim=kwargs["s1_emb_dim"],
+            s1_patch_size=kwargs["s1_patch_size"],
+            s1_local_patch_size=kwargs["s1_local_patch_size"],
+            s1_global_k=kwargs["s1_global_k"],
+            s1_depth=kwargs["s1_depth"],
+            s2_emb_dim=kwargs["s2_emb_dim"],
+            s2_patch_size=kwargs["s2_patch_size"],
+            s2_local_patch_size=kwargs["s2_local_patch_size"],
+            s2_global_k=kwargs["s2_global_k"],
+            s2_depth=kwargs["s2_depth"],
+            s3_emb_dim=kwargs["s3_emb_dim"],
+            s3_patch_size=kwargs["s3_patch_size"],
+            s3_local_patch_size=kwargs["s3_local_patch_size"],
+            s3_global_k=kwargs["s3_global_k"],
+            s3_depth=kwargs["s3_depth"],
+            s4_emb_dim=kwargs["s4_emb_dim"],
+            s4_patch_size=kwargs["s4_patch_size"],
+            s4_local_patch_size=kwargs["s4_local_patch_size"],
+            s4_global_k=kwargs["s4_global_k"],
+            s4_depth=kwargs["s4_depth"],
+            peg_kernel_size=kwargs["peg_kernel_size"],
+            dropout=kwargs["dropout"],
+            heads=kwargs["heads"],
+        )
+
+    elif transformer_type == "LeViT":
+        model = LeViT(
+            image_size=img_size,
+            num_classes=num_classes,
+            channels=num_channels,
+            stages=kwargs["stages"],  # number of stages
+            dim=kwargs["dim"],  # dimensions at each stage
+            depth=kwargs["depth"],  # transformer of depth 4 at each stage
+            heads=kwargs["heads"],  # heads at each stage
+            mlp_mult=kwargs["mlp_mult"],
+            dropout=kwargs["dropout"],
+        )
+
+    return model
