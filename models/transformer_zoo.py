@@ -2,6 +2,8 @@ from .crossformer import CrossFormer
 from .twins_svt import TwinsSVT
 from .levit import LeViT
 from .pit import PiT
+from .cait import CaiT
+from .cross_vit import CrossViT
 from vit_pytorch.cct import CCT
 from vit_pytorch.t2t import T2TViT
 
@@ -126,7 +128,7 @@ def GetT2TViT(num_classes, num_channels, img_size, **kwargs):
 
 
 def TransformerModels(transformer_type, num_classes, num_channels, img_size, **kwargs):
-    assert transformer_type in ["CCT", "TwinsSVT", "LeViT"]
+    assert transformer_type in ["CCT", "TwinsSVT", "LeViT", "CaiT", "CrossViT"]
 
     if transformer_type == "CCT":
         model = CCT(
@@ -189,4 +191,43 @@ def TransformerModels(transformer_type, num_classes, num_channels, img_size, **k
             dropout=kwargs["dropout"],
         )
 
+    elif transformer_type == "CaiT":
+        model = CaiT(
+            image_size=img_size,
+            num_classes=num_classes,
+            channels=num_channels,
+            patch_size=kwargs["patch_size"],
+            dim=kwargs["dim"],
+            depth=kwargs["depth"],
+            cls_depth=kwargs["cls_depth"],
+            heads=kwargs["heads"],
+            mlp_dim=kwargs["mlp_dim"],
+            dropout=kwargs["dropout"],
+            emb_dropout=kwargs["emb_dropout"],
+            layer_dropout=kwargs["layer_dropout"],
+        )
+
+    elif transformer_type == "CrossViT":
+        model = CrossViT(
+            image_size=img_size,
+            num_classes=num_classes,
+            channels=num_channels,
+            depth=kwargs["depth"],
+            sm_dim=kwargs["sm_dim"],
+            sm_patch_size=kwargs["sm_patch_size"],
+            sm_enc_depth=kwargs["sm_enc_depth"],
+            sm_enc_heads=kwargs["sm_enc_heads"],
+            sm_enc_mlp_dim=kwargs["sm_enc_mlp_dim"],
+            lg_dim=kwargs["lg_dim"],
+            lg_patch_size=kwargs["lg_patch_size"],
+            lg_enc_depth=kwargs["lg_enc_depth"],
+            lg_enc_heads=kwargs["lg_enc_heads"],
+            lg_enc_mlp_dim=kwargs["lg_enc_mlp_dim"],
+            cross_attn_depth=kwargs["cross_attn_depth"],
+            cross_attn_heads=kwargs["cross_attn_heads"],
+            dropout=kwargs["dropout"],
+            emb_dropout=kwargs["emb_dropout"],
+        )
+
     return model
+

@@ -58,6 +58,9 @@ from models.transformer_zoo import (
 from config.cct_config import CCT_CONFIG
 from config.twinssvt_config import TWINSSVT_CONFIG
 from config.levit_config import LEVIT_CONFIG
+from config.cait_config import CAIT_CONFIG
+from config.crossvit_config import CROSSVIT_CONFIG
+
 
 import json
 
@@ -85,7 +88,7 @@ parser.add_argument(
     type=str,
     default="CCT",
     help="transformer config",
-    choices=["CCT", "TwinsSVT", "LeViT"],
+    choices=["CCT", "TwinsSVT", "LeViT", "CaiT", "CrossViT"],
 )
 
 parser.add_argument("--cuda", action="store_true", help="whether to use cuda")
@@ -112,6 +115,10 @@ def main():
         train_config = TWINSSVT_CONFIG
     elif train_config_name == "LeViT":
         train_config = LEVIT_CONFIG
+    elif train_config_name == "CaiT":
+        train_config = CAIT_CONFIG
+    elif train_config_name == "CrossViT":
+        train_config = CROSSVIT_CONFIG
 
     network_type = train_config["network_type"]
     network_config = train_config["network_config"]

@@ -2,7 +2,7 @@ TWINSSVT_CONFIG = {
     "network_type": "TwinsSVT",
     "pretrained": False,
     "image_size": 224,
-    "batch_size": 128,
+    "batch_size": 64,
     "num_epochs": 15,
     "optimizer_config": {
         "name": "AdamW",
