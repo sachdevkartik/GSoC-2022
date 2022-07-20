@@ -1,7 +1,103 @@
 # __GSoC-2022__
-## __Ongoing GSoC project__ <br>
+ __Ongoing GSoC project__ <br>
 <br>
 
+# __Tested Transformer architectures__
+
+<br>
+
+### __[CvT](https://arxiv.org/pdf/2103.15808.pdf)__
+
+  | Dataset | Acc (%) | AUC (axion) | AUC (cdm) | AUC (no_sub) 
+  | :---:  | :---: | :---: | :---: | :---: | 
+  | Model I   |  91.54  | 0.9714  | 0.9657 | 0.9991 |
+  | Model II  | 99.41  | 0.9987  | 0.9990 | 1.0000 |
+  | Model III |  99.04   | 0.9986  | 0.9992 | 1.0000 |
+
+<br>
+
+### __[CrossFormer](https://arxiv.org/pdf/2203.13387.pdf)__
+
+  | Dataset | Acc (%) | AUC (axion) | AUC (cdm) | AUC (no_sub) 
+  | :---:  | :---: | :---: | :---: | :---: | 
+  | Model I   |  91.20  | 0.9508  | 0.9511 | 0.9996 |
+  | Model II  | 97.42  | 0.9856  | 0.6041 | 0.9998 |
+  | Model III |  98.13   | 0.9782  | 0.9096 | 0.9998 |
+
+<br>
+
+### __[LeViT](https://openaccess.thecvf.com/content/ICCV2021/papers/Graham_LeViT_A_Vision_Transformer_in_ConvNets_Clothing_for_Faster_Inference_ICCV_2021_paper.pdf)__
+
+  | Dataset | Acc (%) | AUC (axion) | AUC (cdm) | AUC (no_sub) 
+  | :---:  | :---: | :---: | :---: | :---: | 
+  | Model I   | 91.64   |  0.9720 | 0.8612 | 0.9997 |
+  | Model II  | 97.12  | 0.9936  | 0.9800 | 1.0000 |
+  | Model III | 97.97    | 0.9981  | 0.9973 | 1.0000 |
+
+<br>
+
+### __[CCT](https://arxiv.org/abs/2104.05704v4)__
+
+  | Dataset | Acc (%) | AUC (axion) | AUC (cdm) | AUC (no_sub) 
+  | :---:  | :---: | :---: | :---: | :---: | 
+  | Model I   |  89.71  | 0.9632  | 0.9462 | 0.9988 |
+  | Model II  |  69.68 | 0.9566  | 0.8216 | 0.9061 |
+  | Model III | 99.48    | 0.9999  | 0.9998 | 1.0000 |
+
+<br>
+
+### __[CrossViT](https://arxiv.org/abs/2103.14899)__
+
+  | Dataset | Acc (%) | AUC (axion) | AUC (cdm) | AUC (no_sub) 
+  | :---:  | :---: | :---: | :---: | :---: | 
+  | Model I   |  84.20   | 0.9261  | 0.8816 | 0.9988 |
+  | Model II  |  91.33    | 0.9816  | 0.9386 | 0.9959 |
+  | Model III | 81.29    | 0.5192  | 0.5106 | 0.5419 |
+
+<br>
+
+### __[CaiT](https://arxiv.org/abs/2103.17239)__
+
+  | Dataset | Acc (%) | AUC (axion) | AUC (cdm) | AUC (no_sub) 
+  | :---:  | :---: | :---: | :---: | :---: | 
+  | Model I   |   67.93  | 0.6726  | 0.5640 | 0.7497 |
+  | Model II  |  62.97   | 0.9318  | 0.6548 | 0.7833 |
+  | Model III | 69.38    | 0.5160  | 0.4986 | 0.5195 |
+
+<br>
+
+### __[T2TViT](https://openaccess.thecvf.com/content/ICCV2021/html/Yuan_Tokens-to-Token_ViT_Training_Vision_Transformers_From_Scratch_on_ImageNet_ICCV_2021_paper.html)__
+
+  | Dataset | Acc (%) | AUC (axion) | AUC (cdm) | AUC (no_sub) 
+  | :---:  | :---: | :---: | :---: | :---: | 
+  | Model I   |   88.12 | 0.9706  | 0.6502 | 0.9902 |
+  | Model II  |  - | -  | - | - |
+  | Model III |  77.29   | 0.6515  | 0.9737 | 0.8980 |
+
+<br>
+
+### __[PiT](https://arxiv.org/abs/2103.16302)__
+
+  | Dataset | Acc (%) | AUC (axion) | AUC (cdm) | AUC (no_sub) 
+  | :---:  | :---: | :---: | :---: | :---: | 
+  | Model I   |  40.63   | 0.5981  | 0.5584 | 0.6580|
+  | Model II  |   33.60  | 0.5351 | 0.2022 | 0.5378 |
+  | Model III | 34.18    | 0.5176  | 0.5153 | 0.5294 |
+
+<br>
+
+### __[TwinsSVT](https://arxiv.org/abs/2104.13840)__
+
+  | Dataset | Acc (%) | AUC (axion) | AUC (cdm) | AUC (no_sub) 
+  | :---:  | :---: | :---: | :---: | :---: | 
+  | Model I   |  91.08   | 0.6678  | 0.9179 | 0.9993 |
+  | Model II  |   97.44  | 0.9812  | 0.6572 | 0.9996 |
+  | Model III | 98.48    | 0.9942  | 0.5183 | 0.9999 |
+
+
+<br>
+
+# __Previous work__
 ### __Equivariant Convolutional Vision Transformer__ ##
 
 An Equivariant Convolutional Vision Transformer is built for binary classification using PyTorch. Approach and strategy are discussed in [test2_e2c_vit.ipynb](./test2_e2c_vit.ipynb)
