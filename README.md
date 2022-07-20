@@ -36,6 +36,16 @@
 
 <br>
 
+### __[TwinsSVT](https://arxiv.org/abs/2104.13840)__
+
+  | Dataset | Acc (%) | AUC (axion) | AUC (cdm) | AUC (no_sub) 
+  | :---:  | :---: | :---: | :---: | :---: | 
+  | Model I   |  91.08   | 0.6678  | 0.9179 | 0.9993 |
+  | Model II  |   97.44  | 0.9812  | 0.6572 | 0.9996 |
+  | Model III | 98.48    | 0.9942  | 0.5183 | 0.9999 |
+  
+<br>
+
 ### __[CCT](https://arxiv.org/abs/2104.05704v4)__
 
   | Dataset | Acc (%) | AUC (axion) | AUC (cdm) | AUC (no_sub) 
@@ -43,6 +53,7 @@
   | Model I   |  89.71  | 0.9632  | 0.9462 | 0.9988 |
   | Model II  |  69.68 | 0.9566  | 0.8216 | 0.9061 |
   | Model III | 99.48    | 0.9999  | 0.9998 | 1.0000 |
+
 
 <br>
 
@@ -86,13 +97,6 @@
 
 <br>
 
-### __[TwinsSVT](https://arxiv.org/abs/2104.13840)__
-
-  | Dataset | Acc (%) | AUC (axion) | AUC (cdm) | AUC (no_sub) 
-  | :---:  | :---: | :---: | :---: | :---: | 
-  | Model I   |  91.08   | 0.6678  | 0.9179 | 0.9993 |
-  | Model II  |   97.44  | 0.9812  | 0.6572 | 0.9996 |
-  | Model III | 98.48    | 0.9942  | 0.5183 | 0.9999 |
 
 
 <br>
