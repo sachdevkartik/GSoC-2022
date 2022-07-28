@@ -6,6 +6,7 @@ from .cait import CaiT
 from .cross_vit import CrossViT
 from vit_pytorch.cct import CCT
 from vit_pytorch.t2t import T2TViT
+from typing import Any
 
 
 def GetCrossFormer(num_classes, num_channels):
@@ -127,7 +128,40 @@ def GetT2TViT(num_classes, num_channels, img_size, **kwargs):
     return model
 
 
-def TransformerModels(transformer_type, num_classes, num_channels, img_size, **kwargs):
+def TransformerModels(
+    transformer_type: str,
+    num_classes: int,
+    num_channels: int,
+    img_size: int,
+    **kwargs: Any
+):
+    
+    """Get different transform architecture
+
+    Args:
+        transformer_type (str): 
+            name of the transformer ["CCT", "TwinsSVT", "LeViT", "CaiT", "CrossViT", "PiT"]
+        num_classes (int): # of classes for classification 
+        num_channels (int): # of channels of input image 
+        img_size (int): size of input image
+
+    Returns:
+        model: nn.Module
+    
+    Example:
+        >>>     TransformerModels(
+        >>>     transformer_type="LeViT",
+        >>>     num_channels=1,
+        >>>     num_classes=3,
+        >>>     img_size=224,
+        >>>     {   "stages": 3,  
+        >>>         "dim": (64, 128, 128),  
+        >>>         "depth": 5, 
+        >>>         "heads": (2, 4, 5),
+        >>>         "mlp_mult": 2,
+        >>>         "dropout": 0.1})
+    """
+
     assert transformer_type in ["CCT", "TwinsSVT", "LeViT", "CaiT", "CrossViT", "PiT"]
 
     if transformer_type == "CCT":
@@ -244,5 +278,4 @@ def TransformerModels(transformer_type, num_classes, num_channels, img_size, **k
         )
 
     return model
-
 

@@ -1,3 +1,4 @@
+from typing import Optional
 from torchvision import transforms
 from torchvision.transforms import (
     RandomRotation,
@@ -18,8 +19,27 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from torch.utils.data import DataLoader, Dataset
 
+#             upsample_size=387,
+# final_size=train_config["image_size"],
+# channels=train_config["channels"],
 
-def get_transform_train(upsample_size, final_size, channels=1):
+
+def get_transform_train(
+    upsample_size: int, final_size: int, channels: Optional[int] = 1
+):
+    """Trainset transformation
+
+    Args:
+        upsample_size (int): intermediate upsampling size
+        final_size (int): final size of image to network
+        channels (Optional[int], optional): number of channels of final image to network. Defaults to 1.
+
+    Returns:
+        Compose: transforms.Compose
+
+    Example:
+        >>> get_transform_test(387, 224, 1)
+    """
 
     random_transform = []
     transform1 = transforms.Compose(
@@ -88,7 +108,19 @@ def get_transform_train(upsample_size, final_size, channels=1):
     return transform_effective
 
 
-def get_transform_test(final_size, channels=1):
+def get_transform_test(final_size: int, channels: Optional[int] = 1):
+    """testset transformation
+
+    Args:
+        final_size (int): final size of image to network
+        channels (int, optional): number of channels of final image. Defaults to 1.
+
+    Returns:
+        Compose: transforms.Compose
+    
+    Example:
+        >>> get_transform_test(387, 224, 1)
+    """
     if channels == 3:
         transform_test = Compose([Resize(final_size), ToTensor(),])
         return transform_test
