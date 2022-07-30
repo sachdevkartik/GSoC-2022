@@ -1,4 +1,4 @@
-#!${HPCBASH}/bin/zsh
+#!<SHEBANG>
 
 # ask for eight tasks
 #SBATCH --ntasks=8
@@ -12,14 +12,20 @@
 # name the job
 #SBATCH --job-name=DEEPLENSE
 
+# request two gpus per node
+#SBATCH --gres=gpu:pascal:1 # volta pascal
+
 # declare the merged STDOUT/STDERR file
 #SBATCH --output=output.%J.txt
 
-#SBATCH --time=00:30:30
- 
+#SBATCH --time=04:00:00
+
+#SBATCH --mail-user=<email>
+#SBATCH --mail-type=ALL 
+
 ### beginning of executable commands
 ### Change to working directory
-cd ${HPCDIR}/home/GSoC-2022
+cd ${DEEPLENSE_DIR}
 
 ### Execute your application
-python3 main.py --dataset_name Model_I --no-cuda
+python3 -u main.py --num_workers 20 --dataset_name Model_III --train_config TwinsSVT --cuda
