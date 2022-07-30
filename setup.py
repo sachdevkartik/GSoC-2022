@@ -3,14 +3,15 @@ from pathlib import Path
 from setuptools import find_packages, setup
 
 # Package meta-data.
-NAME = "deeplense"
-DESCRIPTION = "DeepLense library for classiying Dark Matter Halos"
-URL = "https://github.com/sachdevkartik/GSoC-2022.git"
+NAME = "deeplense-transformers"
+DESCRIPTION = "DeepLense library for classiying Dark Matter Halos using transformers"
+URL = "https://github.com/sachdevkartik/GSoC-2022/tree/epic/official_project"
 EMAIL = "kartik,sachdev125@gmail.com"
 AUTHOR = "Kartik Sachdev"
 REQUIRES_PYTHON = ">=3.6.0"
 
-long_description = DESCRIPTION
+with open("README.md", "r", encoding="utf-8") as f:
+    long_description = f.read()
 
 # Load the package's VERSION file as a dictionary.
 about = {}
@@ -39,7 +40,7 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
-    packages=find_packages(exclude=("tests",)),
+    packages=find_packages(include=["models", "utils"]),
     package_data={"deeplense": ["VERSION"]},
     install_requires=list_reqs(),
     extras_require={},
@@ -57,5 +58,11 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
+    ],
+    keywords=[
+        "Transformers",
+        "Gravitational Lensing",
+        "Image Classification",
+        "Dark Matter",
     ],
 )
