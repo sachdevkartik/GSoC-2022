@@ -69,14 +69,12 @@ python3 -u main.py \
 | cuda | Use cuda |
 | no-cuda | Not use cuda |
 
-<br>
 
 ### __Jupyterfile__
 
 Run the [example file](example.ipynb)  
 
 ___Note__: To view the dataset, ROC curve and confusion matrix in the jupyter file, please comment out: `matplotlib.use("Agg")` from  `utils/inference.py` file. This is will automated in the future version._
-<br>
 
 
 ### __Cluster__
@@ -90,7 +88,6 @@ sbatch < jobscript.sh
 
 So, far 9 different versions of Vision Transformers have been tested. Results are as follows:
 
-<br>
 
 ### __[CvT](https://arxiv.org/pdf/2103.15808.pdf)__
 
@@ -172,7 +169,6 @@ So, far 9 different versions of Vision Transformers have been tested. Results ar
   | Model I   |  40.63   | 0.5981  | 0.5584 | 0.6580|
   | Model II  |   33.60  | 0.5351 | 0.2022 | 0.5378 |
   | Model III | 34.18    | 0.5176  | 0.5153 | 0.5294 |
-
 
 
 
