@@ -7,10 +7,20 @@ import logging
 
 
 def make_directory(dirname: str) -> None:
+    """makes a single directory
+
+    Args:
+        dirname (str): name of desired directory
+    """
     os.makedirs(dirname, exist_ok=True)
 
 
 def make_directories(dirnames: List[str]) -> None:
+    """makes directories from a list of desired directories
+
+    Args:
+        dirnames (List[str]): list of desired directories
+    """
     for dirname in dirnames:
         make_directory(dirname)
 

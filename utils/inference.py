@@ -21,6 +21,10 @@ from torchvision.transforms import (
 )
 from sklearn.metrics import roc_curve, auc, confusion_matrix
 from utils.dataset import DeepLenseDataset
+import torch.nn as nn
+from torch.utils.data import DataLoader, Dataset
+from typing import *
+
 
 matplotlib.use("Agg")
 
@@ -28,18 +32,48 @@ matplotlib.use("Agg")
 class Inference(object):
     def __init__(
         self,
-        best_model,
-        test_loader,
-        device,
-        num_classes,
-        testset,
-        dataset_name,
-        labels_map,
-        image_size,
-        channels,
-        log_dir,
+        best_model: nn.Module,
+        test_loader: DataLoader,
+        device: Union[int, str],
+        num_classes: int,
+        testset: Dataset,
+        dataset_name: str,
+        labels_map: dict,
+        image_size: int,
+        channels: int,
+        log_dir: str,
         destination_dir="data",
     ) -> None:
+        """Class for infering the trained model. \n 
+        Plots `Confusion matrix`, computes `AUC` and `ROC` score.  `normalize=True`
+
+        Args:
+            best_model (nn.Module): best trained model to infer
+            test_loader (DataLoader): pytorch loader for testset
+            device (Union[int, str]): number or name of device
+            num_classes (int): # of classes for classification
+            testset (Dataset): dataset for testing
+            dataset_name (str): name of testeset 
+            labels_map (dict): dict for mapping labels to number e.g `{0: "axion"}`
+            image_size (int): size of input image
+            channels (int): # of channels of input image
+            log_dir (str): directory for saving logs
+            destination_dir (str, optional): directory where data is saved. Defaults to "data".
+        
+        Example:
+        >>>     infer_obj = Inference(
+        >>>             best_model= model,
+        >>>             test_loader= test_loader,
+        >>>             device=device,
+        >>>             num_classes=num_classes,
+        >>>             testset=testset,
+        >>>             dataset_name=dataset_name,
+        >>>             labels_map=classes,
+        >>>             image_size=image_size,
+        >>>             channels=train_config["channels"],
+        >>>             destination_dir="data",
+        >>>             log_dir=log_dir)
+        """
 
         self.best_model = best_model
         self.test_loader = test_loader
@@ -54,12 +88,22 @@ class Inference(object):
         self.log_dir = log_dir
 
     def to_one_hot_vector(self, label):
+        """Converts labels to one-hot encoding
+
+        Args:
+            label (np.ndarray): labels of dataset 
+
+        Returns:
+            b (np.ndarray): one-hot encoded vector
+        """
         b = np.zeros((label.shape[0], self.num_classes))
         b[np.arange(label.shape[0]), label] = 1
 
         return b.astype(int)
 
     def infer_plot_roc(self):
+        """Plots `ROC` curve
+        """
         total = 0
         all_test_loss = []
         all_test_accuracy = []
@@ -156,11 +200,22 @@ class Inference(object):
         # fig.savefig(f"{self.log_dir}/roc.png", dpi=150)
 
     def plot_confusion_matrix(
-        self, cm, classes, normalize=False, title="Confusion matrix", cmap=plt.cm.Blues
+        self,
+        cm: Any,
+        classes,
+        normalize=False,
+        title="Confusion matrix",
+        cmap=plt.cm.Blues,
     ):
-        """
-        This function prints and plots the confusion matrix.
+        """Function to print and plot the confusion matrix.
         Normalization can be applied by setting `normalize=True`.
+
+        Args:
+            cm (Any): confusion matrix to be plotted
+            classes (list): list of classes available in dataset 
+            normalize (bool, optional): whether to noramlize or not. Defaults to False.
+            title (str, optional): title of plot. Defaults to "Confusion matrix".
+            cmap (Any, optional): colormap for plotting . Defaults to plt.cm.Blues.
         """
         import itertools
 
@@ -210,18 +265,33 @@ class Inference(object):
     def rot_equivariance(
         self,
         model: torch.nn.Module,
-        x,
-        device,
-        labels_map,
-        resize1,
-        resize2,
-        pad,
-        to_tensor,
-        to_gray,
-        image_size,
-        channels,
-    ):
-        # evaluate the `model` on 8 rotated versions of the input image `x`
+        x: Any,
+        device: Union[int, str],
+        labels_map: dict,
+        resize1: int,
+        resize2: int,
+        pad: Any,
+        to_tensor: Any,
+        to_gray: Any,
+        image_size: int,
+        channels: int,
+    ) -> None:
+        """Evaluates the `model` on 8 rotated versions of the input image `x`
+
+        Args:
+            model (torch.nn.Module): best trained model to test
+            x (Any): image to test on
+            device (Union[int, str]): number or name of device 
+            labels_map (dict): dict for mapping labels to number e.g `{0: "axion"}`
+            resize1 (int): intermediate upsampling size 
+            resize2 (int): final size of image to network \n
+            pad (Any): pytorch transform: `Pad` \n
+            to_tensor (Any): pytorch transform: `ToTensor` \n
+            to_gray (Any): pytorch transform: `Grayscale` \n
+            image_size (int): size of input image \n
+            channels (int): # of channels of input image \n 
+        """
+
         model.eval()
 
         wrmup = model(torch.randn(1, channels, image_size, image_size).to(device))
@@ -249,6 +319,9 @@ class Inference(object):
         print("###########################")
 
     def test_equivariance(self):
+        """Tests equivariance of the trained model. 
+        Evaluates the `model` on 8 rotated versions an image from `testset`
+        """
         valset_notransform = DeepLenseDataset(
             self.destination_dir, "test", self.dataset_name, transform=None
         )

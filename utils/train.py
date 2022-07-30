@@ -6,23 +6,57 @@ import torch
 from tqdm import tqdm
 from typing import *
 import wandb
+import torch.nn as nn
 
 
 def train(
-    epochs,
-    model,
-    device,
-    train_loader,
-    valid_loader,
-    criterion,
-    optimizer,
-    use_lr_schedule,
-    scheduler_step,
-    path,
-    config,
-    dataset_name,
+    epochs: int,
+    model: nn.Module,
+    device: Union[int, str],
+    train_loader: Any,
+    valid_loader: Any,
+    criterion: nn.Module,
+    optimizer: nn.Module,
+    use_lr_schedule: nn.Module,
+    scheduler_step: nn.Module,
+    path: str,
+    config: dict,
+    dataset_name: str,
     log_freq=100,
 ):
+    """Supervised learning for image classification. Uses `wandb` for logging
+
+    Args:
+        epochs (int): # of epochs
+        model (nn.Module): model for training
+        device (Union[int, str]): number or name of device
+        train_loader (Any): pytorch loader for trainset
+        valid_loader (Any): pytorch loader for testset
+        criterion (nn.Module): loss critirea
+        optimizer (nn.Module): optimizer for model training
+        use_lr_schedule (nn.Module): whether to use learning rate scheduler
+        scheduler_step (nn.Module): type of learning rate scheduler
+        path (str): path to save models
+        config (dict): model hyperparameters as dict 
+        dataset_name (str): type of dataset
+        log_freq (int, optional): logging frequency. Defaults to 100.
+   
+   Example:
+   >>>     train(
+   >>>     epochs=25, 
+   >>>     model=model,
+   >>>     device=0,
+   >>>     train_loader=train_loader,
+   >>>     valid_loader=test_loader,
+   >>>     criterion=criterion,
+   >>>     optimizer=optimizer,
+   >>>     use_lr_schedule=train_config["lr_schedule_config"]["use_lr_schedule"],
+   >>>     scheduler_step=cosine_scheduler,
+   >>>     path=PATH,
+   >>>     log_freq=20,
+   >>>     config=train_config,
+   >>>     dataset_name=dataset_name)
+    """
     wandb.init(config=config, group=dataset_name, job_type="train")  # ,mode="disabled"
     wandb.watch(model, criterion, log="all", log_freq=log_freq)
 

@@ -14,7 +14,12 @@ def download_dataset(
     filename: str,
     url: str = "https://drive.google.com/uc?id=1m7QzSzXyE8u_QoYplN9dIe-X2pf1KXxt",
 ) -> None:
+    """Downloads dataset from Google drive
 
+    Args:
+        filename (str): output directory name
+        url (str, optional): URL to dataset. Defaults to "https://drive.google.com/uc?id=1m7QzSzXyE8u_QoYplN9dIe-X2pf1KXxt".
+    """
     if not os.path.isfile(filename):
         try:
             gdown.download(url, filename, quiet=False)
@@ -24,13 +29,20 @@ def download_dataset(
         print("File exists")
 
 
-def extract_split_dataset(  # change to filename
+def extract_split_dataset(
     filename: str,
     destination_dir: str = "data",
     dataset_name: str = "Model_I",
     split: bool = False,
 ) -> None:
+    """Extract from .tar file and splits dataset (90:10) into train and validation set
 
+    Args:
+        filename (str): tar filename
+        destination_dir (str, optional): output directory name. Defaults to "data".
+        dataset_name (str, optional): dataset name: Model_I, Model_II, Model_III. Defaults to "Model_I".
+        split (bool, optional): whether to split or not. Defaults to False.
+    """
     # only extracting folder
     if not split:
         print("Extracting folder ...")
@@ -53,16 +65,38 @@ def extract_split_dataset(  # change to filename
 
 
 class DeepLenseDataset(Dataset):
-    # TODO: add val-loader + splitting
     def __init__(
         self,
-        destination_dir,
-        mode,
-        dataset_name,
+        destination_dir: str,
+        mode: str,
+        dataset_name: str,
         transform=None,
         download="False",
         channels=1,
     ):
+        """Class for DeepLense dataset
+
+        Args:
+            destination_dir (str): directory where dataset is stored \n
+            mode (str): type of dataset:  `train` or `val` or `test` 
+            dataset_name (str): name of dataset e.g. Model_I
+            transform (_type_, optional): transformation of images. Defaults to None.
+            download (str, optional): whether to download the dataset. Defaults to "False".
+            channels (int, optional): # of channels. Defaults to 1.
+        
+        Example:
+            >>>     trainset = DeepLenseDataset(
+            >>>     dataset_dir,
+            >>>     "train",
+            >>>     dataset_name,
+            >>>     transform=get_transform_train(
+            >>>     upsample_size=387,
+            >>>     final_size=train_config["image_size"],
+            >>>     channels=train_config["channels"]),
+            >>>     download=True,
+            >>>     channels=train_config["channels"])
+
+        """
         assert mode in ["train", "test", "val"]
 
         if mode == "train":
@@ -115,19 +149,11 @@ class DeepLenseDataset(Dataset):
     def __getitem__(self, index):
         image, label = self.imagefilename[index], self.labels[index]
 
-        image = np.load(image, allow_pickle=True)  # , mmap_mode='r'
+        image = np.load(image, allow_pickle=True)
         if label == 0:
             image = image[0]
         image = (image - np.min(image)) / (np.max(image) - np.min(image))
         image = np.expand_dims(image, axis=2)
-
-        # image = image / image.max()  # normalizes data in range 0 - 255
-        # image = 255 * image
-        # image = (image - np.min(image))/(np.max(image) - np.min(image))
-        # if self.channels == 3:
-        #     image = Image.fromarray(image.astype("uint8")).convert("RGB")
-        # else:
-        #     image = Image.fromarray(image.astype("uint8"))  # .convert("RGB")
 
         if self.transform is not None:
             transformed = self.transform(image=image)
@@ -143,7 +169,17 @@ class DeepLenseDataset(Dataset):
 
 def visualize_samples(
     dataset, labels_map, fig_height=15, fig_width=15, num_cols=5, cols_rows=5
-):  # trainset
+) -> None:
+    """Visualize samples from dataset
+
+    Args:
+        dataset (torch.utils.data.Dataset): dataset to visualize
+        labels_map (dict): dict for mapping labels to number e.g `{0: "axion"}`
+        fig_height (int, optional): height of visualized sample. Defaults to 15.
+        fig_width (int, optional): width of visualized sample. Defaults to 15.
+        num_cols (int, optional): # of columns of images in a window. Defaults to 5.
+        cols_rows (int, optional): # of rows of images in a window. Defaults to 5.
+    """
     # labels_map = {0: "axion", 1: "cdm", 2: "no_sub"}
     figure = plt.figure(figsize=(fig_height, fig_width))
     cols, rows = num_cols, cols_rows

@@ -19,10 +19,6 @@ import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from torch.utils.data import DataLoader, Dataset
 
-#             upsample_size=387,
-# final_size=train_config["image_size"],
-# channels=train_config["channels"],
-
 
 def get_transform_train(
     upsample_size: int, final_size: int, channels: Optional[int] = 1
@@ -85,11 +81,6 @@ def get_transform_train(
     transform_train = Compose(
         [
             RandomCrop(128),
-            # Pad((0, 0, 1, 1), fill=0),
-            # Resize(upsample_size),
-            # RandomRotation(degrees=(0, 180), resample=Image.BILINEAR, expand=False),
-            # RandomVerticalFlip(p=0.3),
-            # RandomHorizontalFlip(p=0.3),
             Resize(final_size),
             Grayscale(num_output_channels=1),
             ToTensor(),
@@ -109,7 +100,7 @@ def get_transform_train(
 
 
 def get_transform_test(final_size: int, channels: Optional[int] = 1):
-    """testset transformation
+    """Testset transformation
 
     Args:
         final_size (int): final size of image to network

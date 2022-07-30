@@ -7,8 +7,7 @@ import torch.nn.functional as F
 from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
 
-# code refered from: https://github.com/lucidrains/vit-pytorch
-
+# file adapted from: https://github.com/lucidrains/vit-pytorch/blob/main/vit_pytorch/levit.py
 # helpers
 
 

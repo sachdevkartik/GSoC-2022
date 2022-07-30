@@ -9,7 +9,19 @@ from vit_pytorch.t2t import T2TViT
 from typing import Any
 
 
-def GetCrossFormer(num_classes, num_channels):
+def GetCrossFormer(num_classes: int, num_channels: int):
+    """Wraps CrossFormer transformer architecture introduced in the paper: \n
+    `CrossFormer: Cross Spatio-Temporal Transformer for 3D Human Pose Estimation`
+
+    Args:
+        num_classes (int): # of classes for classification
+        num_channels (int): # of channels of input image
+
+    Returns:
+        model (nn.Module): CrossFormer model
+    
+    https://arxiv.org/pdf/2203.13387.pdf
+    """
     model = CrossFormer(
         num_classes=num_classes,  # number of output classes
         channels=num_channels,
@@ -21,7 +33,20 @@ def GetCrossFormer(num_classes, num_channels):
     return model
 
 
-def GetTwinsSVT(num_classes, num_channels):
+def GetTwinsSVT(num_classes: int, num_channels: int):
+    """Wraps Twins SVT transformer architecture introduced in the paper: \n
+    `Twins: Revisiting the Design of Spatial Attention in Vision Transformers`
+
+    Args:
+        num_classes (int): # of classes for classification
+        num_channels (int): # of channels of input image
+
+    Returns:
+        model (nn.Module): TwinsSVT model
+    
+    https://arxiv.org/pdf/2104.13840.pdf
+    """
+
     model = TwinsSVT(
         num_classes=num_classes,  # number of output classes
         s1_emb_dim=16,  # stage 1 - patch embedding projected dimension
@@ -52,7 +77,19 @@ def GetTwinsSVT(num_classes, num_channels):
     return model
 
 
-def GetLeViT(num_classes, num_channels, img_size):
+def GetLeViT(num_classes: int, num_channels: int, img_size: int):
+    """Wraps LeViT transformer architecture introduced in the paper: \n
+    `LeViT: a Vision Transformer in ConvNet’s Clothing for Faster Inference`
+
+    Args:
+        num_classes (int): # of classes for classification
+        num_channels (int): # of channels of input image
+
+    Returns:
+        model (nn.Module): LeViT model
+    
+    https://openaccess.thecvf.com/content/ICCV2021/papers/Graham_LeViT_A_Vision_Transformer_in_ConvNets_Clothing_for_Faster_Inference_ICCV_2021_paper.pdf
+    """
 
     model = LeViT(
         image_size=img_size,
@@ -68,7 +105,19 @@ def GetLeViT(num_classes, num_channels, img_size):
     return model
 
 
-def GetPiT(num_classes, num_channels, img_size):
+def GetPiT(num_classes: int, num_channels: int, img_size: int):
+    """Wraps PiT transformer architecture introduced in the paper: \n
+    `Rethinking Spatial Dimensions of Vision Transformers`
+
+    Args:
+        num_classes (int): # of classes for classification
+        num_channels (int): # of channels of input image
+
+    Returns:
+        model (nn.Module): PiT model
+    
+    https://arxiv.org/pdf/2103.16302.pdf
+    """
 
     model = PiT(
         image_size=img_size,
@@ -89,8 +138,19 @@ def GetPiT(num_classes, num_channels, img_size):
     return model
 
 
-def GetCCT(num_classes, num_channels, img_size):
+def GetCCT(num_classes: int, num_channels: int, img_size: int):
+    """Wraps CCT transformer architecture introduced in the paper: \n
+    `Escaping the Big Data Paradigm with Compact Transformers`
 
+    Args:
+        num_classes (int): # of classes for classification
+        num_channels (int): # of channels of input image
+
+    Returns:
+        model (nn.Module): CCT model
+    
+    https://arxiv.org/pdf/2104.05704v4.pdf
+    """
     model = CCT(
         img_size=img_size,
         embedding_dim=256,
@@ -135,7 +195,7 @@ def TransformerModels(
     img_size: int,
     **kwargs: Any
 ):
-    
+
     """Get different transform architecture
 
     Args:
@@ -146,7 +206,7 @@ def TransformerModels(
         img_size (int): size of input image
 
     Returns:
-        model: nn.Module
+        model (nn.Module): Required transformer architecture
     
     Example:
         >>>     TransformerModels(
@@ -160,6 +220,13 @@ def TransformerModels(
         >>>         "heads": (2, 4, 5),
         >>>         "mlp_mult": 2,
         >>>         "dropout": 0.1})
+    
+    CCT: https://arxiv.org/pdf/2104.05704v4.pdf \n
+    TwinsSVT: https://arxiv.org/pdf/2104.13840.pdf \n
+    LeViT: https://openaccess.thecvf.com/content/ICCV2021/papers/Graham_LeViT_A_Vision_Transformer_in_ConvNets_Clothing_for_Faster_Inference_ICCV_2021_paper.pdf \n
+    CaiT: https://arxiv.org/pdf/2103.17239.pdf \n
+    CrossViT: https://arxiv.org/pdf/2103.14899.pdf \n
+    PiT: https://arxiv.org/pdf/2103.16302.pdf \n
     """
 
     assert transformer_type in ["CCT", "TwinsSVT", "LeViT", "CaiT", "CrossViT", "PiT"]

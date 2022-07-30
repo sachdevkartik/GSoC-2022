@@ -4,8 +4,7 @@ from einops import rearrange
 from einops.layers.torch import Rearrange, Reduce
 import torch.nn.functional as F
 
-# code refered from: https://github.com/lucidrains/vit-pytorch
-
+# file adapted from: https://github.com/lucidrains/vit-pytorch/blob/main/vit_pytorch/crossformer.py
 # helpers
 
 def cast_tuple(val, length=1):
