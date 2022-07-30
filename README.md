@@ -6,7 +6,7 @@ This is an ongoing __Google Summer of Code (GSoC) 2022__ project. For more info 
 <br>
 
 # __Datasets__
-The models are tested on namely 3 datasets. Consists of 30,000 images per class. All the images are consists of a single channel. All the dataset consists of 3 classes: 
+The models are tested on mainly 3 datasets consisting of 30,000 images (single channel) per class. All the dataset consists of 3 classes namely: 
 - No substructure
 - Axion (vortex)
 - CDM (point mass subhalos)
@@ -33,6 +33,9 @@ ___Note__: Axion files have extra data corresponding to mass of axion used in si
 # __Installation__
 To install locally, using pip:
 ```bash
+git clone https://github.com/sachdevkartik/GSoC-2022.git
+cd GSoC-2022
+git checkout epic/official_project
 pip3 install --user --upgrade -r requirements.txt
 ```
 
@@ -48,7 +51,7 @@ pip3 install .
 # __Training__
 
 ### __Locally__
-Modify the configuration of the model and training scheme for the respective training from the [config](/config/) folder. Then, the script can be run locally as: 
+Modify the configuration of the model and training scheme from the [config](/config/) folder. Then, the script can be run locally. Example: 
 ```bash
 cd GSoC-2022
 python3 -u main.py \
@@ -57,16 +60,15 @@ python3 -u main.py \
 --train_config TwinsSVT \
 --cuda   
 ```
-| Argument | Description |
+| Arguments | Description |
 | :---  | :--- | 
 | num_workers | Number of workers available for training |
 | dataset_name | Name of the dataset type for DeepLense project |
 | save | Path where the dataset is stored |
-| train_config | Transformer config; implemented so far: [CCT, TwinsSVT, LeViT, CaiT, CrossViT, PiT] |
+| train_config | Transformer config: [CCT, TwinsSVT, LeViT, CaiT, CrossViT, PiT] |
 | cuda | Use cuda |
 | no-cuda | Not use cuda |
 
-<br>
 <br>
 
 ### __Jupyterfile__
@@ -75,12 +77,10 @@ Run the [example file](example.ipynb)
 
 ___Note__: To view the dataset, ROC curve and confusion matrix in the jupyter file, please comment out: `matplotlib.use("Agg")` from  `utils/inference.py` file. This is will automated in the future version._
 <br>
-<br>
 
 
 ### __Cluster__
-Modify the file `jobscript.sh` as per the system and user specifics. 
-Train using __SLURM__ by running the following: 
+Modify the file `jobscript.sh` as per the system and user specifics and then, train using __SLURM__. Example: 
 ```bash
 sbatch < jobscript.sh
 ```
@@ -100,7 +100,6 @@ So, far 9 different versions of Vision Transformers have been tested. Results ar
   | Model II  | 99.41  | 0.9987  | 0.9990 | 1.0000 |
   | Model III |  99.04   | 0.9986  | 0.9992 | 1.0000 |
 
-<br>
 
 ### __[CrossFormer](https://arxiv.org/pdf/2203.13387.pdf)__
 
@@ -110,7 +109,6 @@ So, far 9 different versions of Vision Transformers have been tested. Results ar
   | Model II  | 97.42  | 0.9856  | 0.6041 | 0.9998 |
   | Model III |  98.13   | 0.9782  | 0.9096 | 0.9998 |
 
-<br>
 
 ### __[LeViT](https://openaccess.thecvf.com/content/ICCV2021/papers/Graham_LeViT_A_Vision_Transformer_in_ConvNets_Clothing_for_Faster_Inference_ICCV_2021_paper.pdf)__
 
@@ -120,7 +118,6 @@ So, far 9 different versions of Vision Transformers have been tested. Results ar
   | Model II  | 97.12  | 0.9936  | 0.9800 | 1.0000 |
   | Model III | 97.97    | 0.9981  | 0.9973 | 1.0000 |
 
-<br>
 
 ### __[TwinsSVT](https://arxiv.org/abs/2104.13840)__
 
@@ -130,7 +127,6 @@ So, far 9 different versions of Vision Transformers have been tested. Results ar
   | Model II  |   97.44  | 0.9812  | 0.6572 | 0.9996 |
   | Model III | 98.48    | 0.9942  | 0.5183 | 0.9999 |
   
-<br>
 
 ### __[CCT](https://arxiv.org/abs/2104.05704v4)__
 
@@ -141,7 +137,6 @@ So, far 9 different versions of Vision Transformers have been tested. Results ar
   | Model III | 99.48    | 0.9999  | 0.9998 | 1.0000 |
 
 
-<br>
 
 ### __[CrossViT](https://arxiv.org/abs/2103.14899)__
 
@@ -151,7 +146,6 @@ So, far 9 different versions of Vision Transformers have been tested. Results ar
   | Model II  |  91.33    | 0.9816  | 0.9386 | 0.9959 |
   | Model III | 81.29    | 0.5192  | 0.5106 | 0.5419 |
 
-<br>
 
 ### __[CaiT](https://arxiv.org/abs/2103.17239)__
 
@@ -161,7 +155,6 @@ So, far 9 different versions of Vision Transformers have been tested. Results ar
   | Model II  |  62.97   | 0.9318  | 0.6548 | 0.7833 |
   | Model III | 69.38    | 0.5160  | 0.4986 | 0.5195 |
 
-<br>
 
 ### __[T2TViT](https://openaccess.thecvf.com/content/ICCV2021/html/Yuan_Tokens-to-Token_ViT_Training_Vision_Transformers_From_Scratch_on_ImageNet_ICCV_2021_paper.html)__
 
@@ -171,7 +164,6 @@ So, far 9 different versions of Vision Transformers have been tested. Results ar
   | Model II  |  - | -  | - | - |
   | Model III |  77.29   | 0.6515  | 0.9737 | 0.8980 |
 
-<br>
 
 ### __[PiT](https://arxiv.org/abs/2103.16302)__
 
@@ -181,7 +173,6 @@ So, far 9 different versions of Vision Transformers have been tested. Results ar
   | Model II  |   33.60  | 0.5351 | 0.2022 | 0.5378 |
   | Model III | 34.18    | 0.5176  | 0.5153 | 0.5294 |
 
-<br>
 
 
 
@@ -240,7 +231,7 @@ An efficient Convolutional Vision Transformer (CvT) is built for binary classifi
 * [CvT](https://arxiv.org/abs/2103.15808)
 
 
-  ```
+  ```bibtex
   @article{wu2021cvt,
     title={Cvt: Introducing convolutions to vision transformers},
     author={Wu, Haiping and Xiao, Bin and Codella, Noel and Liu, Mengchen and Dai, Xiyang and Yuan, Lu and Zhang, Lei},
@@ -346,7 +337,7 @@ An efficient Convolutional Vision Transformer (CvT) is built for binary classifi
 * [Training data-efficient image transformers & distillation through attention](https://arxiv.org/pdf/2012.12877.pdf)
 
 
-    ```
+    ```bibtex
     @article{touvron2020deit,
       title={Training data-efficient image transformers & distillation through attention},
       author={Hugo Touvron and Matthieu Cord and Matthijs Douze and Francisco Massa and Alexandre Sablayrolles and Herv\'e J\'egou},
@@ -357,7 +348,7 @@ An efficient Convolutional Vision Transformer (CvT) is built for binary classifi
 
 * [General E(2)-Equivariant Steerable CNNs](https://arxiv.org/abs/1911.08251)
  
-    ```
+    ```bibtex
     @inproceedings{e2cnn,
         title={{General E(2)-Equivariant Steerable CNNs}},
         author={Weiler, Maurice and Cesa, Gabriele},
